@@ -94,3 +94,8 @@ This will open the Ollama Web interface, and you can start using it locally!
 
 Enjoy using Ollama Web! If you have any questions or need assistance, feel free to open an issue on the [GitHub repository](https://github.com/shekharP1536/ollama-web).
 ```
+<<<<<<< HEAD
+=======
+
+You can now copy and paste this code into your `README.md` file. Let me know if you need any further changes!
+>>>>>>> 3adb422 (addded Readme)

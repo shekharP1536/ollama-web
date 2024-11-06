@@ -65,8 +65,9 @@ def generate_reponse(prompt ,model):
         if not stream_web:
             break
         message_chunk = chunk['message']['content']
-        response_text += message_chunk
-        client(message_chunk) # type: ignore
+        response_text += message_chunk +"#"
+        process(message_chunk)
+        
 
     conversation.append({'role': 'bot','model': model, 'content': response_text})
     done_marker = "[|/__DONE__/|]"
@@ -75,7 +76,19 @@ def generate_reponse(prompt ,model):
 
     client(done_marker)
 
+def process(message_chunk):
+    match message_chunk:
+        case _ if "\n" in message_chunk or message_chunk == "":  # Check if it contains '\n', '*' or is empty
+            message_chunk = "<br>"
+        case _ if "\n\n\n" in message_chunk:  # Check if it contains three newlines
+            message_chunk = "<hr><br><br>"
+        case _:  # Default case if none of the above match
+            pass
 
+
+    message_chunk.replace("*" , "<br>")
+    message_chunk.replace("\n" , "<br>")
+    client(message_chunk)
 
 
 

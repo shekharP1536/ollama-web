@@ -3,6 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="/static/resource/marked.min.js"
+      integrity="sha384-dZulhREgb+hCgQMhZ2VG0l37VQj5pJBq2w0h7Jn3tdMn36aXNepF1+FMLBB4O649"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="/static/resource/purify.min.js"
+      integrity="sha256-QigBQMy2be3IqJD2ezKJUJ5gycSmyYlRHj2VGBuITpU="
+      crossorigin="anonymous"
+    ></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -11,25 +21,33 @@
     />
     <title>Yara Chatbot</title>
   </head>
-  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="stylesheet" href="/static/styles.css" />
 
   <body>
     <div class="container">
       <div class="heading">
-        <h2>Ollama Chat</h2>
+        <div>
+          <h2>Ollama Chat</h2>
+        </div>
+        <div>
+          <select id="select_model_btn">
+            Select model
+          </select>
+          <!-- <i class="fa fa-cog"></i> -->
+        </div>
+
       </div>
       <div id="new_msg"></div>
       <div class="input_message">
         <input type="text" id="userInput" placeholder="Type your message..." />
         <button id="submitButton">Send</button>
       </div>
-      <select id="select_model_btn">Select model
-
-
-      </select>
     </div>
 
     <script src="/static/script.js"></script>
-    <script src="https://kit.fontawesome.com/0d194b00b9.js" crossorigin="anonymous"></script>
+    <script
+      src="https://kit.fontawesome.com/0d194b00b9.js"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>

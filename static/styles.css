@@ -30,6 +30,9 @@ body {
 .heading {
     margin-bottom: 15px;
     text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .heading h2 {
@@ -123,14 +126,47 @@ button:hover {
     background-color: #9f62e8;
     transform: translateY(-2px);
 }
-
-#select_model_btn {
-    background-color: #cf6679;
+.message:hover p.copy{
+    visibility: visible ;
+}
+.copy{
+    visibility: hidden;
 }
 
-#select_model_btn:hover {
-    background-color: #b0555f;
+select {
+    appearance: none; /* Removes default dropdown arrow */
+    -webkit-appearance: none; /* Removes default dropdown arrow for WebKit browsers */
+    -moz-appearance: none; /* Removes default dropdown arrow for Firefox */
+    max-width: 300px; /* Width of the select element */
+    padding: 10px; /* Padding inside the select box */
+    font-size: 16px; /* Font size */
+    font-family: 'Arial', sans-serif; /* Font family */
+    border: 2px solid #ccc; /* Border color */
+    border-radius: 8px; /* Rounded corners */
+    background-color: #2a243d; /* Light background color */
+    color: #edc5fe; /* Text color */
+    cursor: pointer; /* Pointer cursor on hover */
+    position: relative; /* For positioning the custom dropdown arrow */
 }
+
+select:focus {
+    border-color: #007bff; /* Border color on focus */
+    outline: none; /* Remove outline on focus */
+}
+
+select option {
+    padding: 10px; /* Padding inside each option */
+}
+
+select::after {
+    content: ' ▼'; /* Adds a custom arrow */
+    position: absolute;
+    right: 10px; /* Position the arrow */
+    top: 50%;
+    transform: translateY(-50%); /* Center the arrow vertically */
+    pointer-events: none; /* Prevents the arrow from blocking clicks */
+}
+
 
 /* Navigation Bar */
 .navbar {
@@ -185,5 +221,19 @@ button:hover {
     background-color: #9f62e8;
 }
 i:hover{
-    font-size: 20px;
+    /* font-size: 20px; */
+    cursor: pointer;
+}
+code {
+    display: block; /* Makes the code appear on a new line */
+    background-color: #3b354f; /* Light background color */
+    border-radius: 4px; /* Rounded corners for a soft look */
+    padding: 10px; /* Adds padding inside the code block */
+    font-family: 'Courier New', Courier, monospace; /* Monospace font for code */
+    font-size: 14px; /* Adjust font size */
+    color: #333; /* Text color */
+    white-space: pre-wrap; /* Preserves spaces and line breaks */
+    word-wrap: break-word; /* Allows long words to break and wrap to the next line */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow around the block */
+    margin: 10px 0; /* Adds spacing above and below the code block */
 }

@@ -5,6 +5,10 @@ let loadingIndicator;
 let flow = false;
 const sentences = [];
 let currentSentence = "";
+marked.use({
+  mangle: false,
+  headerIds: false
+});
 
 // Initialize the page and populate model list on load
 document.addEventListener("DOMContentLoaded", get_list);
@@ -32,15 +36,19 @@ function startMessage(speaker) {
   messageContainer.appendChild(messageContentContainer);
 
   // Add a hover effect to show the copy button
+  var copyButton_container = document.createElement("p");
+  copyButton_container.classList.add("copy");
+  copyButton_container.style.Display = "none";
   var copyButton = document.createElement("i");
   copyButton.classList.add("fa-regular");
   copyButton.classList.add("fa-copy");
   copyButton.addEventListener("click", () => {
     copyToClipboard(messageContentContainer.innerText)
-    copyButton = '<i class="fa-solid fa-copy"></i> copied';
+    copyButton_container.innerHTML = '<i class="fa-solid fa-copy"></i> copied';
   });
 
-  messageContainer.appendChild(copyButton);
+  messageContainer.appendChild(copyButton_container);
+  copyButton_container.appendChild(copyButton);
 
   messageDiv.appendChild(messageContainer);
 
@@ -50,18 +58,19 @@ function startMessage(speaker) {
     loadingIndicator.remove();
   }
 }
-
+var response_content = "";
 // Function to add content to the current message
 function addContent(content) {
-  if (content === "```") {
-    messageContent.innerHTML += "<custom>";
-  } else {
-    messageContent.innerText += content;
+  if(content != undefined && content !=""){
+    response_content += content;
+    var new_reponsee = DOMPurify.sanitize(marked.parse(response_content));
+    messageContent.innerHTML = new_reponsee;
   }
 }
 
 // Function to end the current message and optionally show a loading indicator
 function endMessage() {
+  response_content = ""
   flow = false;
   if (currentSpeaker === "user") {
     showLoadingIndicator("Processing...");
