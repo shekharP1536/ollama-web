@@ -1,6 +1,3 @@
-Here is the complete `README.md` code for your project:
-
-```markdown
 # Ollama Web
 
 Ollama Web is a web-based interface for interacting with the Ollama model. This README will guide you through setting up and running the project on both Windows and Linux systems.
