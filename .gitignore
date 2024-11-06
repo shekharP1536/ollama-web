@@ -1,0 +1,6 @@
+/.venv
+/__pycache__
+/info.log
+/log_data
+/other
+/realtimesst.log
