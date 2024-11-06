@@ -1,0 +1,101 @@
+Here is the complete `README.md` code for your project:
+
+```markdown
+# Ollama Web
+
+Ollama Web is a web-based interface for interacting with the Ollama model. This README will guide you through setting up and running the project on both Windows and Linux systems.
+
+## Prerequisites
+
+Before running the project, you need to download and set up **Ollama** on your system.
+
+
+### 1. Download and Install Ollama
+
+### For Windows Users:
+1. Visit the [Ollama download page](https://ollama.com/download) for Windows.
+2. Download the Windows installer and run it.
+3. Follow the installation instructions to complete the process.
+
+### For Linux Users:
+1. Open your terminal and run the following command to install Ollama:
+
+   ```bash
+   curl -fsSL https://ollama.com/install.sh | bash
+   ```
+
+2. After installation, verify that Ollama is installed successfully by running:
+
+   ```bash
+   ollama --version
+   ```
+
+### 2. Install Required Python Packages
+
+Once Ollama is installed, you need to install the necessary Python packages to run the project.
+
+1. Create a virtual environment (optional but recommended) to keep dependencies isolated:
+
+   ```bash
+   python3 -m venv venv
+   ```
+
+2. Activate the virtual environment:
+
+   - **On Windows:**
+     ```bash
+     .\venv\Scripts\activate
+     ```
+
+   - **On Linux/Mac:**
+     ```bash
+     source venv/bin/activate
+     ```
+
+3. Install the required Python packages:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+### 3. Clone the Repository
+
+To get the code, you need to clone the `ollama-web` repository from GitHub. Use the following command to clone the repository:
+
+```bash
+git clone https://github.com/shekharP1536/ollama-web.git
+cd ollama-web
+```
+
+### 4. Run the Application
+
+After cloning the repository, navigate to the project directory and run the `index.py` script to start the web application:
+
+```bash
+python index.py
+```
+
+### 5. Access the Application
+
+Once the application is running, open your web browser and go to:
+
+```
+http://localhost:5000
+```
+
+This will open the Ollama Web interface, and you can start using it locally!
+
+---
+
+## Troubleshooting
+
+- Ensure that you've followed all the installation steps for your operating system (Windows or Linux).
+- Verify that Python and all required dependencies are installed correctly by running `pip install -r requirements.txt`.
+- If you encounter any issues with Ollama, try restarting your system or checking the [Ollama documentation](https://ollama.com/docs) for more help.
+
+---
+
+Enjoy using Ollama Web! If you have any questions or need assistance, feel free to open an issue on the [GitHub repository](https://github.com/shekharP1536/ollama-web).
+```
+
+You can now copy and paste this code into your `README.md` file. Let me know if you need any further changes!
