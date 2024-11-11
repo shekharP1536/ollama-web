@@ -7,3 +7,5 @@
 templates/index.html
 templates/style.css
 .gitignore
+/python
+.vscode/settings.json

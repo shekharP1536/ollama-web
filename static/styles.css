@@ -11,12 +11,17 @@ body {
     color: #e0e0e0;
     line-height: 1.6;
 }
-
+/* universe
+ */
+ .universe{
+    display: flex;
+    justify-content: space-around;
+ }
 /* Main Container */
-.container {
+.container_n {
     width: 100%;
     max-width: 1000px;
-    margin: 20px auto;
+    margin: 10px;
     padding: 20px;
     background-color: #28293d;
     border-radius: 12px;
@@ -236,4 +241,20 @@ code {
     word-wrap: break-word; /* Allows long words to break and wrap to the next line */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow around the block */
     margin: 10px 0; /* Adds spacing above and below the code block */
+}
+.action_bar{
+    display: flex;
+    flex-direction: row;
+}
+.actions{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0px 3px;
+    padding: 3px;
+}
+.actions div{
+    padding: 10px;
+    margin: 0pxc 4px;
+    font-size: 20px;
 }

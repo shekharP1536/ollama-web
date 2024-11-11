@@ -13,30 +13,153 @@
     rel="stylesheet" />
   <title>Ollama Chat</title>
 </head>
+<link rel="stylesheet" href="/static/resource/bootstrap.css" />
 <link rel="stylesheet" href="/static/styles.css" />
+<link rel="stylesheet" href="/static/extra.css" />
 
 <body>
-  <div class="container">
-    <div class="heading">
-      <div>
-        <h2>Ollama Chat</h2>
-      </div>
-      <div>
+  <div class="universe">
+    <div class="container_n">
+      <div class="heading">
+        <div>
+          <h2>Ollama Chat</h2>
+        </div>
         <select id="select_model_btn">
           Select model
         </select>
-        <!-- <i class="fa fa-cog"></i> -->
-      </div>
+        <div class="action_bar">
+          <div class="actions">
 
+            <div class="save" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <i class="fa-regular fa-floppy-disk"></i>
+            </div>
+            <div class="cmd_mode">
+              <i class="fa-solid fa-terminal"></i>
+            </div>
+            <div class="dropdown ">
+              <button class="btn btn-secondary dropdown-toggle " type="button" id="dropdownMenuButton1"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa fa-cog"></i>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" href="#" data-bs-target="#settingmodal">Manage Voice</a></li>
+                <li><a class="dropdown-item" href="#">history</a></li>
+                <li>
+                  <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#settingmodal"> Prefrence</a>
+                </li>
+                </button>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="new_msg"></div>
+      <div class="input_message">
+        <input type="text" id="userInput" placeholder="Type your message..." />
+        <button id="submitButton">Send</button>
+      </div>
     </div>
-    <div id="new_msg"></div>
-    <div class="input_message">
-      <input type="text" id="userInput" placeholder="Type your message..." />
-      <button id="submitButton">Send</button>
+    <div class="content">
+      <div class="box">
+        <div class="object">
+          <div class="outline">
+          </div>
+          <div class="outline" id="delayed">
+          </div>
+          <div class="button">
+          </div>
+          <div class="button-container">
+            <input type="checkbox" id="micButton" class="mic-checkbox">
+            <label for="micButton" class="mic-button">
+              <div class='mic'>
+                <div class='mic-button-loader'>
+                </div>
+                <div class="mic-base">
+                </div>
+              </div>
+              <div class="button-message">
+                <span>
+                  PRESS TO TALK
+                </span>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="gen_txt_con" id="gen_txt_con">
+        Here will be generated text shown
+      </div>
+    </div>
+
+
+  </div>
+  </div>
+
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-dark" id="exampleModalLabel">Save Chat</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">@filename</span>
+            <input type="text" class="form-control" placeholder="Filename" aria-label="Username" aria-describedby="basic-addon1">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
     </div>
   </div>
 
+
+  <div class="modal fade" id="settingmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable w-75 p-3">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="tab">
+            <button class="tablinks" onclick="openCity(event, 'London')" id="defaultOpen">London</button>
+            <button class="tablinks" onclick="openCity(event, 'Paris')">Paris</button>
+            <button class="tablinks" onclick="openCity(event, 'Tokyo')">Tokyo</button>
+          </div>
+
+          <div id="London" class="tabcontent">
+            <h3>London</h3>
+            <p>London is the capital city of England.</p>
+          </div>
+
+          <div id="Paris" class="tabcontent">
+            <h3>Paris</h3>
+            <p>Paris is the capital of France.</p>
+          </div>
+
+          <div id="Tokyo" class="tabcontent">
+            <h3>Tokyo</h3>
+            <p>Tokyo is the capital of Japan.</p>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn">save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
   <script src="/static/script.js"></script>
+  <script src="/static/feature.js"></script>
+  <script src="/static/resource/bootstrap.bundle.min.js"></script>
   <script src="https://kit.fontawesome.com/0d194b00b9.js" crossorigin="anonymous"></script>
 </body>
 

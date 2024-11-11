@@ -1,17 +1,21 @@
 from http import client
+from urllib import response
 from flask import Flask, render_template, jsonify, Response , request
 import ollama
 import json
+from RealtimeSTT import AudioToTextRecorder
 import time
 import os
 import datetime
 import threading
 from queue import Queue
+mic_event = threading.Event()
 
 app = Flask(__name__ , template_folder='templates')
 
 conversation = []
 clients = []
+sst_client = []
 clients_lock = threading.Lock()
 stream_flow = False
 date_time = datetime.datetime.now()
@@ -32,6 +36,28 @@ def save_conversation():
     with open(file_path, 'w') as f:
         json.dump(conversation, f)
 
+
+def process_text(text):
+    print(text)
+    # Send the text to the client through SSE or some other method
+    send_to_client(text)
+
+def record_audio():
+    print("Microphone ready. Waiting for 'mic_on' command...")
+    recorder = AudioToTextRecorder()
+    while True:
+        # Wait until mic_event is set to start recording
+        mic_event.wait()
+        print("Recording started. Speak now...")
+        # Start recording and process the text until `mic_event` is cleared
+        while mic_event.is_set():
+            recorder.text(process_text)
+        print("Recording stopped.")
+
+record_audio_thread = threading.Thread(target=record_audio)
+record_audio_thread.daemon = True
+record_audio_thread.start()
+
 def client(data):
     """Send data to all connected clients."""
     with clients_lock:
@@ -43,8 +69,6 @@ def generate_reponse(prompt ,model):
     print(prompt, model)
     if prompt == "":
         exit
-    t = time.time()
-    crt = time.ctime(t)
     user_rep_st = "[|/__USER_START__/|]"
     client(user_rep_st)
     client(f"{prompt}")
@@ -73,7 +97,6 @@ def generate_reponse(prompt ,model):
         response_text += message_chunk +"#"
         process(message_chunk)
         
-
     conversation.append({'role': 'bot','model': model, 'content': response_text})
     done_marker = "[|/__DONE__/|]"
     stream_web = False
@@ -90,12 +113,9 @@ def process(message_chunk):
         case _:  # Default case if none of the above match
             pass
 
-
-    message_chunk.replace("*" , "<br>")
-    message_chunk.replace("\n" , "<br>")
+    # message_chunk.replace("*" , "<br>")
+    # message_chunk.replace("\n" , "<br>")
     client(message_chunk)
-
-
 
 @app.route('/')
 def index():
@@ -109,6 +129,44 @@ def get_response():
         model = data.get('model_need')
         response = generate_reponse(prompt, model)
         return jsonify({'response' : 'Success'})
+
+def send_to_client(data):
+    # You will send the text to the client via SSE
+    with app.app_context():
+        for client in sst_client:
+            client.put(data)
+
+@app.route("/get_cmd", methods=["POST"])
+def exe_cmd():
+    data = request.get_json()
+    cmd = data.get("cmd")
+    
+    if cmd == "mic_on":
+        print("Received 'mic_on' command.")
+        mic_event.set()  # Start recording
+
+    elif cmd == "mic_off":
+        print("Received 'mic_off' command.")
+        mic_event.clear()  # Stop recording
+
+    return jsonify({"status": "success", "command": cmd})
+    
+# Event to streame response
+@app.route('/sst_event')
+def stream():
+    def event_stream():
+        queue = Queue()
+        sst_client.append(queue)
+
+        try:
+            while True:
+                # This will yield data from the server to the client when new data is available
+                data = queue.get()  # Blocking call until new data is available
+                yield f"data: {data}\n\n"  # Send the data as an SSE
+        except GeneratorExit:
+            sst_client.remove(queue)
+
+    return Response(event_stream(), content_type='text/event-stream')
 
 @app.route('/list_request' , methods=['POST'])
 def list_llm():
