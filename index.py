@@ -17,14 +17,19 @@ stream_flow = False
 date_time = datetime.datetime.now()
 
 # save converstion_in new_file
+
 def save_conversation():
-    
     folder_name = 'log_data/conversation'
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
+    
+    # Format current date and time to be compatible with file names
+    date_time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     filename = f'conversation_{date_time}.json'
     file_path = os.path.join(folder_name, filename)
-    with open(file_path , 'w') as f:
+    
+    # Save the conversation data to the JSON file
+    with open(file_path, 'w') as f:
         json.dump(conversation, f)
 
 def client(data):

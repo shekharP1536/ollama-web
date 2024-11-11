@@ -27,7 +27,16 @@ Before running the project, you need to download and set up **Ollama** on your s
    ollama --version
    ```
 
-### 2. Install Required Python Packages
+
+### 2. Clone the Repository
+
+To get the code, you need to clone the `ollama-web` repository from GitHub. Use the following command to clone the repository:
+
+```bash
+git clone https://github.com/shekharP1536/ollama-web.git
+cd ollama-web
+```
+### 3. Install Required Python Packages
 
 Once Ollama is installed, you need to install the necessary Python packages to run the project.
 
@@ -54,15 +63,6 @@ Once Ollama is installed, you need to install the necessary Python packages to r
    ```bash
    pip install -r requirements.txt
    ```
-
-### 3. Clone the Repository
-
-To get the code, you need to clone the `ollama-web` repository from GitHub. Use the following command to clone the repository:
-
-```bash
-git clone https://github.com/shekharP1536/ollama-web.git
-cd ollama-web
-```
 
 ### 4. Run the Application
 
@@ -93,9 +93,4 @@ This will open the Ollama Web interface, and you can start using it locally!
 ---
 
 Enjoy using Ollama Web! If you have any questions or need assistance, feel free to open an issue on the [GitHub repository](https://github.com/shekharP1536/ollama-web).
-```
-<<<<<<< HEAD
-=======
 
-You can now copy and paste this code into your `README.md` file. Let me know if you need any further changes!
->>>>>>> 3adb422 (addded Readme)

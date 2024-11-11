@@ -1,2 +1,4 @@
 Flask==2.3.3
 ollama==0.1.0 
+RealtimeSTT==0.3.7
+pyautogui-0.9.54
