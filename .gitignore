@@ -4,3 +4,6 @@
 /log_data
 /other
 /realtimesst.log
+templates/index.html
+templates/style.css
+.gitignore
