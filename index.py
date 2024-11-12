@@ -16,6 +16,7 @@ app = Flask(__name__ , template_folder='templates')
 conversation = []
 clients = []
 sst_client = []
+chat_history = []
 clients_lock = threading.Lock()
 stream_flow = False
 date_time = datetime.datetime.now()
@@ -75,11 +76,11 @@ def generate_reponse(prompt ,model):
     user_rep_end = "[|/__USER_END__/|]"
     client(user_rep_end)
     conversation.append({'role': 'user', 'content': prompt})
-
+    chat_history.append({"role": "user", "content" : prompt})
     #start streaming reponse 
     stream = ollama.chat(
         model=model,
-        messages=[{'role': 'user', 'content': prompt}],
+        messages=[{'role': 'user', 'content': prompt}] + chat_history,
         stream=True,
     )
     response_text = ""
@@ -147,7 +148,8 @@ def exe_cmd():
 
     elif cmd == "mic_off":
         print("Received 'mic_off' command.")
-        mic_event.clear()  # Stop recording
+        mic_event.clear()
+        print("Mic off Done")  # Stop recording
 
     return jsonify({"status": "success", "command": cmd})
     

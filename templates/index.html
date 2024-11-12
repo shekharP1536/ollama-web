@@ -42,7 +42,8 @@
                 <i class="fa fa-cog"></i>
               </button>
               <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton1">
-                <li><a class="dropdown-item" href="#" data-bs-target="#settingmodal">Manage Voice</a></li>
+                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#manage_voice">Manage
+                    Voice</a></li>
                 <li><a class="dropdown-item" href="#">history</a></li>
                 <li>
                   <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#settingmodal"> Prefrence</a>
@@ -59,7 +60,7 @@
         <button id="submitButton">Send</button>
       </div>
     </div>
-    <div class="content">
+    <div class="content" id="speech_content">
       <div class="box">
         <div class="object">
           <div class="outline">
@@ -84,66 +85,112 @@
               </div>
             </label>
           </div>
+
         </div>
       </div>
       <div class="gen_txt_con" id="gen_txt_con">
         Here will be generated text shown
       </div>
+      <div class="speaker_div" id="speaker_div">
+        <div id="bars">
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+        </div>
+        <button id="stopButton">Stop</button>
+      </div>
     </div>
 
 
   </div>
   </div>
 
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade custom-bg-modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title text-dark" id="exampleModalLabel">Save Chat</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Save Chat</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <div class="input-group mb-3">
             <span class="input-group-text" id="basic-addon1">@filename</span>
-            <input type="text" class="form-control" placeholder="Filename" aria-label="Username" aria-describedby="basic-addon1">
+            <input type="text" class="form-control" placeholder="Filename" aria-label="Username"
+              aria-describedby="basic-addon1">
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-primary">Save Chat</button>
         </div>
       </div>
     </div>
   </div>
 
 
-  <div class="modal fade" id="settingmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable w-75 p-3">
+  <div class="modal fade custom-bg-modal" id="manage_voice" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+          <h5 class="modal-title" id="staticBackdropLabel">Manage Voice</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <label for="voiceSelect">Choose Voice:</label>
+          <select id="voiceSelect"></select><br>
+
+          <label for="pitchInput">Pitch (0 to 2):</label>
+          <input type="range" class="range" id="pitchInput" min="0" max="2" step="0.1" value="1"><br>
+
+          <label for="rateInput">Rate (0.1 to 2):</label>
+          <input type="range" class="range" id="rateInput" min="0.1" max="2" step="0.1" value="1"><br>
+
+          <button id="startButton">Preview Voice</button>
+          <button id="stopButton">Stop</button>
+          <div class="modal-footer">
+            <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
+            <!-- <button type="button" class="btn">save</button> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade custom-bg-modal" id="settingmodal" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg  modal-dialog-centered modal-dialog-scrollable w-75 p-3">
+      <div class="modal-content custom-bg-modal">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Prefrence</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <div class="tab">
-            <button class="tablinks" onclick="openCity(event, 'London')" id="defaultOpen">London</button>
-            <button class="tablinks" onclick="openCity(event, 'Paris')">Paris</button>
-            <button class="tablinks" onclick="openCity(event, 'Tokyo')">Tokyo</button>
+            <button class="tablinks" onclick="openCity(event, 'UI')" id="defaultOpen">UI</button>
+            <button class="tablinks" onclick="openCity(event, 'modal')">Modal</button>
+            <button class="tablinks" onclick="openCity(event, 'System')">System</button>
           </div>
 
-          <div id="London" class="tabcontent">
-            <h3>London</h3>
+          <div id="UI" class="tabcontent">
+            <h3>UI</h3>
             <p>London is the capital city of England.</p>
           </div>
 
-          <div id="Paris" class="tabcontent">
-            <h3>Paris</h3>
+          <div id="modal" class="tabcontent">
+            <h3>Modal</h3>
             <p>Paris is the capital of France.</p>
           </div>
 
-          <div id="Tokyo" class="tabcontent">
-            <h3>Tokyo</h3>
+          <div id="System" class="tabcontent">
+            <h3>System</h3>
             <p>Tokyo is the capital of Japan.</p>
           </div>
 
@@ -156,9 +203,9 @@
     </div>
   </div>
 
-
-  <script src="/static/script.js"></script>
   <script src="/static/feature.js"></script>
+  <script src="/static/speech.js"></script>
+  <script src="/static/script.js"></script>
   <script src="/static/resource/bootstrap.bundle.min.js"></script>
   <script src="https://kit.fontawesome.com/0d194b00b9.js" crossorigin="anonymous"></script>
 </body>

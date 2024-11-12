@@ -4,13 +4,15 @@ var mic_on_not = new Audio('static/resource/mic_on_effect.mp3');
 var mic_off_not = new Audio('static/resource/mic_off_effect.mp3');
 var outlines = document.getElementsByClassName("outline");  // Changed outline to outlines
 var prompt = "";
+let need_speaker = false
 mic_button.addEventListener("click", () => {
     if (mic_button.checked) {
         console.log("Checked");
         mic_on_not.play();
         sst_content.innerHTML = "";
         prompt = "";
-        send_cmd("mic_on"); 
+        send_cmd("mic_on");
+        need_speaker = true
         for (let outline of outlines) {  // Loop through outlines correctly
             outline.classList.add("animate-pulse");
         }
@@ -18,6 +20,7 @@ mic_button.addEventListener("click", () => {
         console.log("not");
         mic_off_not.play();
         send_cmd("mic_off");
+        
         console.log(prompt);
         send_mic_input(prompt);
         for (let outline of outlines) {  // Loop through outlines correctly

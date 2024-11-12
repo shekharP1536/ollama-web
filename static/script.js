@@ -65,11 +65,16 @@ function addContent(content) {
     response_content += content;
     var new_reponsee = DOMPurify.sanitize(marked.parse(response_content));
     messageContent.innerHTML = new_reponsee;
+    if(need_speaker){
+      text = new_reponsee;
+    }
   }
 }
 
 // Function to end the current message and optionally show a loading indicator
 function endMessage() {
+  cleanText(text);
+  text = ""
   response_content = ""
   flow = false;
   if (currentSpeaker === "user") {
@@ -158,11 +163,13 @@ eventSource.onmessage = function (event) {
       startMessage("user");
       break;
     case "[|/__USER_END__/|]":
+      text = ""
       endMessage();
       break;
     case "[|/__START__/|]":
       action(true);
       startMessage("bot");
+      
       break;
     case "[|/__DONE__/|]":
       endMessage();
