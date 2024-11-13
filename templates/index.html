@@ -16,6 +16,7 @@
 <link rel="stylesheet" href="/static/resource/bootstrap.css" />
 <link rel="stylesheet" href="/static/styles.css" />
 <link rel="stylesheet" href="/static/extra.css" />
+<link rel="stylesheet" href="/static/prefrence.css" />
 
 <body>
   <div class="universe">
@@ -30,10 +31,11 @@
         <div class="action_bar">
           <div class="actions">
 
-            <div class="save" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <div class="save" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#saave_modal">
+
               <i class="fa-regular fa-floppy-disk"></i>
             </div>
-            <div class="cmd_mode">
+            <div class="cmd_mode " class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#terminal_modal">
               <i class="fa-solid fa-terminal"></i>
             </div>
             <div class="dropdown ">
@@ -44,7 +46,7 @@
               <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton1">
                 <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#manage_voice">Manage
                     Voice</a></li>
-                <li><a class="dropdown-item" href="#">history</a></li>
+                <!-- <li><a class="dropdown-item" href="#">history</a></li> -->
                 <li>
                   <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#settingmodal"> Prefrence</a>
                 </li>
@@ -104,32 +106,32 @@
           <div class="bar"></div>
           <div class="bar"></div>
         </div>
-        <button id="stopButton">Stop</button>
+        <div>
+          <button id="stopButton">Stop</button>
+        </div>
       </div>
     </div>
-
-
   </div>
   </div>
 
-  <div class="modal fade custom-bg-modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+  <div class="modal fade custom-bg-modal" id="saave_modal" tabindex="-1" aria-labelledby="saave_modal"
     aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Save Chat</h5>
+          <h5 class="modal-title" id="saave_modal">Save Chat</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <div class="input-group mb-3">
             <span class="input-group-text" id="basic-addon1">@filename</span>
-            <input type="text" class="form-control" placeholder="Filename" aria-label="Username"
+            <input type="text" class="form-control" id="file_name" placeholder="Filename" aria-label="Username"
               aria-describedby="basic-addon1">
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save Chat</button>
+          <button type="button" id="save_con" class="btn btn-primary" data-bs-dismiss="modal">Save Chat</button>
         </div>
       </div>
     </div>
@@ -138,7 +140,7 @@
 
   <div class="modal fade custom-bg-modal" id="manage_voice" data-bs-backdrop="static" data-bs-keyboard="false"
     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="staticBackdropLabel">Manage Voice</h5>
@@ -164,6 +166,27 @@
       </div>
     </div>
   </div>
+  <div class="modal fade custom-bg-modal" id="terminal_modal" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Teminal</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="terminal-container">
+            <div id="terminal-output"></div>
+            <div class="terminal-input-line">
+                <span class="terminal-prompt">user@localhost:~$</span>
+                <input type="text" id="terminal-input" autofocus />
+            </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
   <div class="modal fade custom-bg-modal" id="settingmodal" data-bs-backdrop="static" data-bs-keyboard="false"
     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg  modal-dialog-centered modal-dialog-scrollable w-75 p-3">
@@ -174,25 +197,40 @@
         </div>
         <div class="modal-body">
           <div class="tab">
-            <button class="tablinks" onclick="openCity(event, 'UI')" id="defaultOpen">UI</button>
-            <button class="tablinks" onclick="openCity(event, 'modal')">Modal</button>
-            <button class="tablinks" onclick="openCity(event, 'System')">System</button>
-          </div>
-
-          <div id="UI" class="tabcontent">
-            <h3>UI</h3>
-            <p>London is the capital city of England.</p>
-          </div>
-
-          <div id="modal" class="tabcontent">
+            <button class="tablinks" onclick="openTab(event, 'User')" id="defaultOpen">User</button>
+            <button class="tablinks" onclick="openTab(event, 'Modal')">Modal</button>
+            <button class="tablinks" onclick="openTab(event, 'ChatUI')">Chat UI</button>
+            <button class="tablinks" onclick="openTab(event, 'System')">System</button>
+            <button class="tablinks" onclick="openTab(event, 'Other')">Other</button>
+        </div>
+        
+        <div id="User" class="tabcontent">
+            <h3>User</h3>
+            <p>Settings related to user configurations will be displayed here.</p>
+        </div>
+        
+        <div id="Modal" class="tabcontent">
             <h3>Modal</h3>
-            <p>Paris is the capital of France.</p>
-          </div>
+            <div id="modal_container">
 
-          <div id="System" class="tabcontent">
+            </div>
+        </div>
+        
+        <div id="ChatUI" class="tabcontent">
+            <h3>Chat UI</h3>
+            <p>Customize the Chat UI elements and layout here.</p>
+        </div>
+        
+        <div id="System" class="tabcontent">
             <h3>System</h3>
-            <p>Tokyo is the capital of Japan.</p>
-          </div>
+            <p>System-related settings and configurations will be displayed here.</p>
+        </div>
+        
+        <div id="Other" class="tabcontent">
+            <h3>Other</h3>
+            <p>Additional settings and information can be added here.</p>
+        </div>
+        
 
         </div>
         <div class="modal-footer">
@@ -202,7 +240,9 @@
       </div>
     </div>
   </div>
-
+  <div id="notification_pannel"></div>
+  <script src="/static/prefrence.js"></script>
+  <script src="/static/cmd.js"></script>
   <script src="/static/feature.js"></script>
   <script src="/static/speech.js"></script>
   <script src="/static/script.js"></script>

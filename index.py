@@ -1,6 +1,7 @@
 from http import client
 from urllib import response
-from flask import Flask, render_template, jsonify, Response , request
+from flask import Flask, render_template, jsonify, Response , request,send_file
+
 import ollama
 import json
 from RealtimeSTT import AudioToTextRecorder
@@ -10,7 +11,7 @@ import datetime
 import threading
 from queue import Queue
 mic_event = threading.Event()
-
+con_path = ""
 app = Flask(__name__ , template_folder='templates')
 
 conversation = []
@@ -22,20 +23,45 @@ stream_flow = False
 date_time = datetime.datetime.now()
 
 # save converstion_in new_file
+import os
+import datetime
+import json
+
+con_path = None  # Initialize global variable to store file path
 
 def save_conversation():
-    folder_name = 'log_data/conversation'
+    global con_path  # Use the global variable to store the file path across calls
+
+    # Define the folder where logs are stored
+    folder_name = 'log_data/conversation_logs'
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
     
-    # Format current date and time to be compatible with file names
-    date_time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    filename = f'conversation_{date_time}.json'
-    file_path = os.path.join(folder_name, filename)
+    # Get the current date (without time) to use as part of the filename
+    date_str = datetime.datetime.now().strftime("%Y-%m-%d")
     
-    # Save the conversation data to the JSON file
-    with open(file_path, 'w') as f:
-        json.dump(conversation, f)
+    # If `con_path` is None or if it doesn't match today's date, create a new file path
+    if not con_path or date_str not in con_path:
+        filename = f'conversation_{date_str}.json'
+        con_path = os.path.join(folder_name, filename)
+
+    # Save or update the conversation data in the JSON file
+    if os.path.exists(con_path):
+        # Load existing data and append new data to it
+        with open(con_path, 'r+') as f:
+            try:
+                existing_data = json.load(f)
+            except json.JSONDecodeError:
+                existing_data = []
+            existing_data.extend(conversation)
+            f.seek(0)
+            json.dump(existing_data, f, indent=4)
+    else:
+        # Create new file if it doesn't exist
+        with open(con_path, 'w') as f:
+            json.dump(conversation, f, indent=4)
+
+    print(f"Conversation saved to {con_path}")
 
 
 def process_text(text):
@@ -137,6 +163,12 @@ def send_to_client(data):
         for client in sst_client:
             client.put(data)
 
+# def download_file():
+#     if con_path and os.path.exists(con_path):
+#         return send_file(con_path, as_attachment=True)
+#     else:
+#         return jsonify({"error": "File not found"}), 404
+
 @app.route("/get_cmd", methods=["POST"])
 def exe_cmd():
     data = request.get_json()
@@ -144,7 +176,14 @@ def exe_cmd():
     
     if cmd == "mic_on":
         print("Received 'mic_on' command.")
-        mic_event.set()  # Start recording
+        mic_event.set()  # Start recording\
+
+    if cmd =="get_file":
+
+            if con_path and os.path.exists(con_path):
+                return send_file(con_path, as_attachment=True)
+            else:
+                return jsonify({"error": "File not found"}), 404
 
     elif cmd == "mic_off":
         print("Received 'mic_off' command.")

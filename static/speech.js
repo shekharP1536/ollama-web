@@ -6,7 +6,10 @@ const pitchInput = document.getElementById("pitchInput");
 const rateInput = document.getElementById("rateInput");
 const speech_div = document.getElementById("speaker_div");
 let voices = [];
-let text = [];
+var text = [];
+let response_content = ""; // Stores incoming content
+let textQueue = []; // Queue for complete sentences
+let isSpeaking = false;
 
 // Get voices when the API is ready
 function populateVoices() {
@@ -37,7 +40,7 @@ function startSpeech(text) {
   console.log(text);
   console.log("Speech-started");
   if (text === "") {
-    text = "This is a sample of voice.";
+    console.log("We got emplty text which can't be synthesis")
   }
   if (text !== "") {
     const speech = new SpeechSynthesisUtterance(text);
@@ -49,6 +52,7 @@ function startSpeech(text) {
     // Show the speaker icon when speech starts
     // Show the speaker icon with fade-in animation
     speech.onstart = () => {
+      isSpeaking = true;
       speech_div.classList.remove("fadeOut"); // Remove fade-out if it's still there
       speech_div.classList.add("speaker_vis");
       console.log("speech_start");
@@ -56,6 +60,9 @@ function startSpeech(text) {
 
     // Hide the speaker icon with fade-out animation
     speech.onend = () => {
+      isSpeaking = false;
+      processQueue();
+    //   need_speaker = true; //temp
       need_speaker = false;
       speech_div.classList.add("fadeOut");
       console.log("end_speech"); // Add fade-out animation
@@ -73,6 +80,7 @@ function startSpeech(text) {
 // Function to stop speech
 function stopSpeech() {
   synth.cancel(); // Cancels the ongoing speech
+//   need_speaker = true; //temp
   need_speaker = false;
   speech_div.classList.add("fadeOut");
   console.log("end_speech");

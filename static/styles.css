@@ -47,6 +47,7 @@ body {
 
 /* Chat Area */
 #new_msg {
+    overflow-y: auto;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -231,12 +232,12 @@ i:hover{
 }
 code {
     display: block; /* Makes the code appear on a new line */
-    background-color: #3b354f; /* Light background color */
+    background-color: #6d6d6d; /* Light background color */
     border-radius: 4px; /* Rounded corners for a soft look */
     padding: 10px; /* Adds padding inside the code block */
     font-family: 'Courier New', Courier, monospace; /* Monospace font for code */
     font-size: 14px; /* Adjust font size */
-    color: #333; /* Text color */
+    color: #ffffff; /* Text color */
     white-space: pre-wrap; /* Preserves spaces and line breaks */
     word-wrap: break-word; /* Allows long words to break and wrap to the next line */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow around the block */
