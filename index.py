@@ -1,5 +1,4 @@
 from http import client
-from urllib import response
 from flask import Flask, render_template, jsonify, Response , request,send_file
 
 import ollama
@@ -81,9 +80,10 @@ def record_audio():
             recorder.text(process_text)
         print("Recording stopped.")
 
-record_audio_thread = threading.Thread(target=record_audio)
-record_audio_thread.daemon = True
-record_audio_thread.start()
+def start_tread():
+    record_audio_thread = threading.Thread(target=record_audio)
+    record_audio_thread.daemon = True
+    record_audio_thread.start()
 
 def client(data):
     """Send data to all connected clients."""
@@ -95,7 +95,7 @@ def client(data):
 def generate_reponse(prompt ,model):
     print(prompt, model)
     if prompt == "":
-        exit
+        return
     user_rep_st = "[|/__USER_START__/|]"
     client(user_rep_st)
     client(f"{prompt}")
@@ -176,6 +176,7 @@ def exe_cmd():
     
     if cmd == "mic_on":
         print("Received 'mic_on' command.")
+        start_tread()
         mic_event.set()  # Start recording\
 
     if cmd =="get_file":
@@ -216,8 +217,7 @@ def list_llm():
         return jsonify({"list": list})
 @app.route('/stream_response')
 def stream_response():
-    def generate():
-        """Handle server-sent events for real-time streaming."""
+
     def generate():
         client_queue = Queue()
         with clients_lock:
