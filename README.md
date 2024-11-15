@@ -17,10 +17,10 @@ Below are some snapshots of the interface:
 3. **other**  
    ![Settings Preview](others/imgc.png)
 
-### Demo Video
+<!-- ### Demo Video
 Watch a short video demo showcasing the main features of Ollama Web:  
 [![Watch the Demo](others/imga.png)](others/demo.mp4)  
-*(Click on the image to view the video.)*
+*(Click on the image to view the video.)* -->
 
 ---
 ## Prerequisites
