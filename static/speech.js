@@ -10,7 +10,9 @@ var text = [];
 let response_content = ""; // Stores incoming content
 let textQueue = []; // Queue for complete sentences
 let isSpeaking = false;
-
+if (!synth) {
+  console.error("Speech synthesis not supported in this browser.");
+}
 // Get voices when the API is ready
 function populateVoices() {
   voices = synth.getVoices();
@@ -79,7 +81,7 @@ function startSpeech(text) {
 
 // Function to stop speech
 function stopSpeech() {
-  synth.cancel(); // Cancels the ongoing speech
+  synth.pause(); // Cancels the ongoing speech
 //   need_speaker = true; //temp
   need_speaker = false;
   speech_div.classList.add("fadeOut");

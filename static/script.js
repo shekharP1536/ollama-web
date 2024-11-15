@@ -72,7 +72,7 @@ function addContent(content) {
     var new_response = DOMPurify.sanitize(marked.parse(response_content));
     messageContent.innerHTML = new_response; // Update message display
     messageContent.scrollTop = messageContent.scrollHeight;
-    console.log(currentSpeaker);
+    // console.log(currentSpeaker);
     if (currentSpeaker == "bot") {
       if (need_speaker) {
         text += content; // Append chunk to form a sentence

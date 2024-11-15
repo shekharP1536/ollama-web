@@ -4,24 +4,45 @@ var mic_on_not = new Audio("static/resource/mic_on_effect.mp3");
 var mic_off_not = new Audio("static/resource/mic_off_effect.mp3");
 var outlines = document.getElementsByClassName("outline"); // Changed outline to outlines
 var prompt = "";
+var allow_user_mic = false
+var first_time = true;
 let need_speaker = false;
 mic_button.addEventListener("click", () => {
+  console.log(first_time);
   if (mic_button.checked) {
     console.log("Checked");
     mic_on_not.play();
     sst_content.innerHTML = "";
     prompt = "";
+    allow_user_mic = true
     send_cmd("mic_on");
+    if(first_time){
+      var i = 10;
+      const interval = setInterval(() => {
+        if(i>=1){ 
+          sst_content.innerHTML = `First time it may take time to start mic wait ${i}`;
+          i--;
+        }else{
+          first_time = false;
+          clearInterval(interval);
+          sst_content.innerHTML = `Speak Now and stop once reponse is compeleted`;
+          
+        }
+      }, 1000);
+    }
     need_speaker = true;
     for (let outline of outlines) {
       // Loop through outlines correctly
       outline.classList.add("animate-pulse");
     }
   } else {
+    console.log(first_time);
+
     console.log("not");
+    first_time = false;
     mic_off_not.play();
     send_cmd("mic_off");
-
+    allow_user_mic = false
     console.log(prompt);
     send_mic_input(prompt);
     for (let outline of outlines) {
@@ -70,10 +91,14 @@ function send_mic_input(userPrompt) {
 
 const STT_source = new EventSource("/sst_event");
 STT_source.onmessage = function (event) {
-  const resp = event.data;
+  if(allow_user_mic){
+    const resp = event.data;
   console.log(resp);
   prompt += resp;
   sst_content.innerHTML += resp;
+  }else
+  console.log("User not allowed this")
+  
 };
 // Handeling tab is setting modal
 function openTab(evt, tabName) {
@@ -127,7 +152,6 @@ document
   });
 
 // Function to process commands
-// Function to process commands
 function processCommand(input, outputDiv) {
   // Add the current command to history
   commandHistory.push(input);
@@ -153,32 +177,6 @@ function processCommand(input, outputDiv) {
   }
 }
 let commandHistory = [];
-
-// Function to process commands
-function processCommand(input, outputDiv) {
-  // Add the current command to history
-  commandHistory.push(input);
-
-  const commandKey = input.toLowerCase();
-
-  // Check if the command exists in the dictionary
-  if (commands[commandKey]) {
-    // If the command is a function, call it and get the response
-    const response = commands[commandKey](outputDiv);
-
-    // Display the response for the command
-    if (response) {
-      const outputResponse = document.createElement("div");
-      outputResponse.innerHTML = formatResponse(response); // Format response with line breaks
-      outputDiv.appendChild(outputResponse);
-    }
-  } else {
-    // If the command is not found, show the 'unknown' response
-    const outputResponse = document.createElement("div");
-    outputResponse.innerHTML = formatResponse(commands["unknown"](input)); // Format response with line breaks
-    outputDiv.appendChild(outputResponse);
-  }
-}
 
 // Function to format response with line breaks
 function formatResponse(response) {
