@@ -1,4 +1,4 @@
-# Ollama Web
+#  ✨💻Ollama Web💡🤝
 
 Ollama Web is a web-based interface for interacting with the Ollama model. This README will guide you through setting up and running the project on both Windows and Linux systems.
 ## 📷 Preview
@@ -11,7 +11,7 @@ Below are some snapshots of the interface:
 1. **Chat UI**  
    ![Chat UI](others/imga.png)
 
-2. **Modl page**  
+2. **Models page**  
    ![Model Preview](others/imgb.png)
 
 3. **other**  
