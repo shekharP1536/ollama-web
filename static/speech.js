@@ -95,7 +95,7 @@ if (speechSynthesis.onvoiceschanged !== undefined) {
 
 // Event listeners for start and stop buttons
 startButton.addEventListener("click", () =>
-  startSpeech("Your custom text here")
+  startSpeech("Hey, there how are you?")
 );
 stopButton.addEventListener("click", stopSpeech);
 

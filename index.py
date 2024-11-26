@@ -121,10 +121,11 @@ def generate_reponse(prompt ,model):
         if not stream_web:
             break
         message_chunk = chunk['message']['content']
-        response_text += message_chunk +"#"
+        response_text += message_chunk
         process(message_chunk)
         
     conversation.append({'role': 'bot','model': model, 'content': response_text})
+    chat_history.append({'role': 'assistant','content': response_text})
     done_marker = "[|/__DONE__/|]"
     stream_web = False
     save_conversation()

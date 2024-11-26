@@ -1,141 +1,147 @@
-
 .content {
-    display: flex;
-    max-width: 500px;
-    /* height: 85vh; */
-    align-items: center;
-    flex-direction: column;
-    justify-content: space-around;
-  }
-  .gen_txt_con{
-    margin: 5px;
-    padding:5px;
-    font-size:22px;
-  }
-  .mic-checkbox {
-    display: none;
-  }
-  
-  .mic-checkbox:checked + .mic-button {
-    transform: rotateY(180deg);
-  }
+  display: flex;
+  max-width: 500px;
+  /* height: 85vh; */
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.gen_txt_con {
+  margin: 5px;
+  padding: 5px;
+  font-size: 22px;
+}
+
+.mic-checkbox {
+  display: none;
+}
+
+.mic-checkbox:checked+.mic-button {
+  transform: rotateY(180deg);
+}
+
 /*   
   .mic-checkbox:checked + .mic-button span{
    display: none;
   }
    */
-  .button-container {
-    perspective: 500px;
-    -moz-perspective: 500px;
-    -webkit-perspective: 500px;
+.button-container {
+  perspective: 500px;
+  -moz-perspective: 500px;
+  -webkit-perspective: 500px;
+}
+
+.mic-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  width: 100px;
+  border-radius: 100%;
+  transition: transform 0.4s;
+  border: 2px solid #fff;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  position: relative;
+}
+
+.button-message,
+.mic {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+}
+
+.button-message {
+  position: absolute;
+  width: 50px;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+  text-align: center;
+  line-height: 20px;
+  z-index: 2;
+  transform: rotateY(0deg);
+  pointer-events: none;
+  left: 23px;
+  top: 20px;
+}
+
+.mic-button-loader {
+  position: absolute;
+  height: 102px;
+  width: 100px;
+  background-color: transparent;
+  transform: rotateY(180deg);
+  top: -40px;
+  left: -50px;
+}
+
+.mic-checkbox:checked+.mic-button>.mic>.mic-button-loader {
+  border-top: 3px solid #AA1111;
+  border-radius: 100%;
+  animation: borderLoader 1.3s 0.2s ease-in-out infinite;
+}
+
+.mic {
+  position: relative;
+  top: -11px;
+  border: 10px solid #fff;
+  height: 20px;
+  width: 0;
+  border-radius: 10px;
+  transform: rotateY(180deg);
+}
+
+.mic:after,
+.mic:before,
+.mic-base {
+  position: absolute;
+}
+
+.mic:after {
+  content: "";
+  /* top: 7px; */
+  left: -13px;
+  height: 26px;
+  width: 26px;
+  background-color: transparent;
+  border: 4px solid #fff;
+  border-bottom-left-radius: 110px;
+  border-bottom-right-radius: 110px;
+  border-top: 0;
+
+}
+
+.mic:before {
+  content: "";
+  top: 25px;
+  left: -2px;
+  border-bottom: 18px solid #fff;
+  border-left: 2px solid #fff;
+  border-right: 2px solid #fff;
+}
+
+.mic-base {
+  top: 42px;
+  left: -10px;
+  border-bottom: 5px solid #fff;
+  border-left: 10px solid #fff;
+  border-right: 10px solid #fff;
+}
+
+@keyframes borderLoader {
+  from {
+    transform: rotate(0deg);
   }
-  
-  .mic-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100px;
-    width: 100px;
-    border-radius: 100%;
-    transition: transform 0.4s;
-    border: 2px solid #fff;
-    transform-style: preserve-3d;
-    -webkit-transform-style: preserve-3d;
-    -moz-transform-style: preserve-3d;
-    position: relative;
+
+  to {
+    transform: rotate(359deg);
   }
-  
-  .button-message, .mic {
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    -moz-backface-visibility: hidden;
-  }
-  
-  .button-message {
-    position: absolute;
-    width: 50px;
-    color: #fff;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: bold;
-    text-align: center;
-    line-height: 20px;
-    z-index: 2;
-    transform: rotateY(0deg);
-    pointer-events: none;
-    left: 23px;
-    top: 20px;
-  }
-  
-  .mic-button-loader {
-    position: absolute;
-    height: 102px;
-    width: 100px;
-    background-color: transparent;
-    transform: rotateY(180deg);
-    top: -40px;
-    left: -50px;
-  }
-  
-  .mic-checkbox:checked + .mic-button > .mic > .mic-button-loader {
-    border-top: 3px solid #AA1111;
-    border-radius: 100%;
-    animation: borderLoader 1.3s 0.2s ease-in-out infinite; 
-  }
-  
-  .mic {
-    position: relative;
-    top: -11px;
-    border: 10px solid #fff;
-    height: 20px;
-    width: 0;
-    border-radius: 10px;
-    transform: rotateY(180deg);
-  }
-  
-  .mic:after, .mic:before, .mic-base {
-    position: absolute;
-  }
-  
-  .mic:after {
-    content: "";
-    /* top: 7px; */
-    left:-13px;
-    height: 26px;
-    width: 26px;
-    background-color: transparent;
-    border: 4px solid #fff;
-    border-bottom-left-radius: 110px;
-    border-bottom-right-radius: 110px;
-    border-top: 0;
-    
-  }
-  
-  .mic:before {
-    content: "";
-    top: 25px;
-    left: -2px;
-    border-bottom: 18px solid #fff;
-    border-left: 2px solid #fff;
-    border-right: 2px solid #fff;
-  }
-  
-  .mic-base {
-    top: 42px;
-    left: -10px;
-    border-bottom: 5px solid #fff;
-    border-left: 10px solid #fff;
-    border-right: 10px solid #fff;
-  }
-  
-  @keyframes borderLoader {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(359deg);
-    }
-  }
-  
+}
+
 
 /* .box {
 	position: absolute;
@@ -145,129 +151,144 @@
 
 .object {
   display: flex;
-	flex: 0 1 100%;
+  flex: 0 1 100%;
   justify-content: center;
   align-items: center;
   align-content: stretch;
 }
 
 .outline {
-	width: 60px;
-	height: 60px;
-	border-radius: 50%;
-	border: 8px solid #B5A4A4;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 8px solid #B5A4A4;
   /* animation: pulse 3s; */
-	animation-timing-function: ease-out;
-	animation-iteration-count: infinite;
-	position: absolute;
+  animation-timing-function: ease-out;
+  animation-iteration-count: infinite;
+  position: absolute;
 }
 
 .button {
-	width: 120px;
-	height: 120px;
-	border-radius: 50%;
-	background: #50CDDD;
-	box-shadow: 0px 0px 40px #0084F9;
-	position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: #50CDDD;
+  box-shadow: 0px 0px 40px #0084F9;
+  position: absolute;
 }
 
 @keyframes pulse {
   0% {
     transform: scale(0);
     opacity: 0;
-		border: 65px solid #0B3082;
+    border: 65px solid #0B3082;
   }
+
   50% {
-		border: solid #A3FFC2;		
-		opacity: 0.8;
+    border: solid #A3FFC2;
+    opacity: 0.8;
   }
-	
-	 90% {
+
+  90% {
     transform: scale(3.2);
-		opacity: 0.2;
-		border: 3px solid #2E3CFF;
+    opacity: 0.2;
+    border: 3px solid #2E3CFF;
   }
+
   100% {
     transform: scale(3.3);
-		opacity: 0;
-		border: 1px solid #7A89FF;
+    opacity: 0;
+    border: 1px solid #7A89FF;
   }
 }
 
 #delayed {
-	animation-delay: 1.5s;
+  animation-delay: 1.5s;
 }
 
 #circlein {
-	width: 100px;
-	height: 100px;
-	border-radius: 50%;
-	background: #6BD6E1;
-	box-shadow: 0px -2px 15px #E0FF94;
-	position: absolute;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: #6BD6E1;
+  box-shadow: 0px -2px 15px #E0FF94;
+  position: absolute;
 }
 
 .mic-icon {
-	height: 60px;
-	position: absolute;
-	margin: 21px;
+  height: 60px;
+  position: absolute;
+  margin: 21px;
 }
+
 .animate-pulse {
-    animation: pulse 3s infinite;
+  animation: pulse 3s infinite;
 }
+
 /* Style the tab */
-* { box-sizing: border-box; }
-body { font-family: "Lato", sans-serif; }
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Lato", sans-serif;
+}
 
 /* Style the tab container */
 .tab {
-    float: left;
-    border: 1px solid #ccc;
-    background-color: rgb(42, 36, 61);
-    width: 25%;
-    height: 400px;
+  float: left;
+  background-color: rgb(42, 36, 61);
+  width: 25%;
+  height: 500px;
 }
 
 /* Style the buttons inside the tab */
 .tab button {
-    display: block;
-    background-color: inherit;
-    color: white;
-    background-color: rgb(42, 36, 61);
-    padding: 16px;
-    width: 100%;
-    border: none;
-    outline: none;
-    text-align: left;
-    cursor: pointer;
-    transition: 0.3s;
-    font-size: 16px;
+  border-radius: 0px;
+  display: block;
+  background-color: inherit;
+  color: white;
+  background-color: rgb(42, 36, 61);
+  padding: 16px;
+  width: 100%;
+  border: none;
+  outline: none;
+  text-align: left;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 16px;
 }
 
 /* Change background color of buttons on hover */
 .tab button:hover {
-    background-color: rgb(58, 50, 85);
+  background-color: rgb(58, 50, 85);
 }
 
 /* Create an active/current "tab button" class */
 .tab button.active {
-    background-color: #ccc;
-    color: black;
+  background-color: #ccc;
+  color: black;
 }
 
 /* Style the tab content */
 .tabcontent {
   overflow: auto;
-    float: left;
-    padding: 12px;
-    border: 1px solid #ccc;
-    width: 75%;
-    border-left: none;
-    height: 400px;
-    display: none; /* Hidden by default */
+  float: left;
+  padding: 12px;
+  width: 75%;
+  border-left: none;
+  height: 500px;
+  display: none;
+  /* Hidden by default */
 }
+
 .custom-bg-modal .modal-content {
-  background-color: rgb(57, 58, 79); /* Customize with desired color */
+  background-color: rgb(57, 58, 79);
+  /* Customize with desired color */
+}
+.custom-bg-modal{
+  border-radius: 20px;
+  padding: 1px;
 }
 /* Modal Body Styling */
 .modal-body {
@@ -296,7 +317,8 @@ body { font-family: "Lato", sans-serif; }
 
 
 /* Buttons Styling */
-button#startButton, button#stopButton {
+button#startButton,
+button#stopButton {
   width: 100%;
   margin-top: 10px;
   padding: 10px;
@@ -312,7 +334,8 @@ button#stopButton {
   background-color: #dc3545;
 }
 
-button#startButton:hover, button#stopButton:hover {
+button#startButton:hover,
+button#stopButton:hover {
   opacity: 0.9;
 }
 
@@ -336,6 +359,7 @@ button#startButton:hover, button#stopButton:hover {
 .modal-footer .btn:hover {
   opacity: 0.9;
 }
+
 .range {
   background: rgb(30, 30, 47);
   border: solid 2px #82CFD0;
@@ -361,7 +385,7 @@ button#startButton:hover, button#stopButton:hover {
   display: flex;
   justify-content: center;
   align-items: center;
-/*     background: black; */
+  /*     background: black; */
 }
 
 .bar {
@@ -376,25 +400,65 @@ button#startButton:hover, button#stopButton:hover {
 
 @keyframes sound {
   0% {
-     opacity: .35;
-      height: 3px; 
+    opacity: .35;
+    height: 3px;
   }
+
   100% {
-      opacity: 1;       
-      height: 70px;        
+    opacity: 1;
+    height: 70px;
   }
 }
 
-.bar:nth-child(1)  { left: 1px; animation-duration: 474ms; }
-.bar:nth-child(2)  { left: 15px; animation-duration: 433ms; }
-.bar:nth-child(3)  { left: 29px; animation-duration: 407ms; }
-.bar:nth-child(4)  { left: 43px; animation-duration: 458ms; }
-.bar:nth-child(5)  { left: 57px; animation-duration: 400ms; }
-.bar:nth-child(6)  { left: 71px; animation-duration: 427ms; }
-.bar:nth-child(7)  { left: 85px; animation-duration: 441ms; }
-.bar:nth-child(8)  { left: 99px; animation-duration: 419ms; }
-.bar:nth-child(9)  { left: 113px; animation-duration: 487ms; }
-.bar:nth-child(10) { left: 127px; animation-duration: 442ms; }
+.bar:nth-child(1) {
+  left: 1px;
+  animation-duration: 474ms;
+}
+
+.bar:nth-child(2) {
+  left: 15px;
+  animation-duration: 433ms;
+}
+
+.bar:nth-child(3) {
+  left: 29px;
+  animation-duration: 407ms;
+}
+
+.bar:nth-child(4) {
+  left: 43px;
+  animation-duration: 458ms;
+}
+
+.bar:nth-child(5) {
+  left: 57px;
+  animation-duration: 400ms;
+}
+
+.bar:nth-child(6) {
+  left: 71px;
+  animation-duration: 427ms;
+}
+
+.bar:nth-child(7) {
+  left: 85px;
+  animation-duration: 441ms;
+}
+
+.bar:nth-child(8) {
+  left: 99px;
+  animation-duration: 419ms;
+}
+
+.bar:nth-child(9) {
+  left: 113px;
+  animation-duration: 487ms;
+}
+
+.bar:nth-child(10) {
+  left: 127px;
+  animation-duration: 442ms;
+}
 
 
 .speaker_div {
@@ -421,6 +485,7 @@ button#startButton:hover, button#stopButton:hover {
     opacity: 0;
     transform: scale(0.8);
   }
+
   100% {
     opacity: 1;
     transform: scale(1);
@@ -432,11 +497,13 @@ button#startButton:hover, button#stopButton:hover {
     opacity: 1;
     transform: scale(1);
   }
+
   100% {
     opacity: 0;
     transform: scale(0.8);
   }
 }
+
 /* Terminal container */
 .terminal-container {
   background-color: #000;
@@ -484,6 +551,7 @@ button#startButton:hover, button#stopButton:hover {
 .terminal-container::-webkit-scrollbar-track {
   background-color: #000;
 }
+
 #notification_pannel {
   display: none;
   position: fixed;

@@ -4,9 +4,11 @@ var mic_on_not = new Audio("static/resource/mic_on_effect.mp3");
 var mic_off_not = new Audio("static/resource/mic_off_effect.mp3");
 var outlines = document.getElementsByClassName("outline"); // Changed outline to outlines
 var prompt = "";
+var ses_log = "";
 var allow_user_mic = false
 var first_time = true;
 let need_speaker = false;
+
 mic_button.addEventListener("click", () => {
   console.log(first_time);
   if (mic_button.checked) {
@@ -216,6 +218,7 @@ save_con_btn.addEventListener("click", () => {
       a.remove();
       window.URL.revokeObjectURL(url);
       showNotification("File downloaded.")
+      save_log("File downloaded.")
     })
     .catch((error) => console.error(error));
 });
@@ -229,6 +232,37 @@ function showNotification(message) {
     messageElement.style.display = "none";
   }, 5000);
 }
+function save_log(log , category) {
+  if(category = "undefined" || category ==""){
+    category = "INFO"
+  }
+  var time = new Date();
+  var log_line = `${time} ${category} ${log}\n`; // Use '\n' for a new line
+  console.log(log_line);
+  ses_log += log_line; // Append log line to ses_log
+}
+function display_logs() {
+  logContainer.innerHTML = "Checking..."
+  // logContainer.innerHTML = "Loading..."; // Clear previous logs
+  if(ses_log != ""){
+    console.log("logfound");
+    const logContainer = document.getElementById("logContainer");
+    logContainer.innerHTML = ""; // Clear previous logs
+
+    // Split logs into an array of lines and create HTML elements
+    const logEntries = ses_log.split("\n").filter((line) => line.trim() !== ""); // Remove empty lines
+    logEntries.forEach((entry) => {
+      const logElement = document.createElement("div");
+      logElement.className = "log-entry";
+      logElement.textContent = entry;
+      logContainer.appendChild(logElement);
+    });
+  }
+  else{
+    logContainer.innerHTML = "No log found!";
+  }
+}
+document.getElementById("viewLogs_btn").addEventListener("click", display_logs);
 messageElement.addEventListener("click", function () {
   messageElement.style.display = "none";
 });
