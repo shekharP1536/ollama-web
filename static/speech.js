@@ -1,6 +1,7 @@
 const synth = window.speechSynthesis;
 const startButton = document.getElementById("startButton");
 const stopButton = document.getElementById("stopButton");
+const stopButton_voice = document.getElementById("stopButton_voice");
 const voiceSelect = document.getElementById("voiceSelect");
 const pitchInput = document.getElementById("pitchInput");
 const rateInput = document.getElementById("rateInput");
@@ -20,7 +21,7 @@ function populateVoices() {
 
   // Filter voices to only include English and Hindi
   const filteredVoices = voices.filter(
-    (voice) => voice.lang.includes("en") || voice.lang.includes("hi")
+    (voice) => voice.lang.includes("en-AU") || voice.lang.includes("en-IN")
   );
 
   // Populate voiceSelect with filtered voices
@@ -95,7 +96,7 @@ if (speechSynthesis.onvoiceschanged !== undefined) {
 
 // Event listeners for start and stop buttons
 startButton.addEventListener("click", () =>
-  startSpeech("Your custom text here")
+  startSpeech("Hey, there how are you?")
 );
 stopButton.addEventListener("click", stopSpeech);
 
@@ -127,4 +128,4 @@ function cleanText(inputText) {
 
 // Usage example
 // Output: "Hello ! Welcome to JavaScript programming."
-stopButton.addEventListener("click", stopSpeech);
+stopButton_voice.addEventListener("click", stopSpeech);

@@ -8,58 +8,182 @@
   <script src="/static/resource/purify.min.js" crossorigin="anonymous"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
   <link
     href="https://fonts.googleapis.com/css2?family=Playwrite+GB+S:ital,wght@0,100..400;1,100..400&family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
     rel="stylesheet" />
   <title>Ollama Chat</title>
 </head>
+<link rel="stylesheet" href="/static/resource/an-old-hope.min.css">
+
 <link rel="stylesheet" href="/static/resource/bootstrap.css" />
 <link rel="stylesheet" href="/static/styles.css" />
 <link rel="stylesheet" href="/static/extra.css" />
 <link rel="stylesheet" href="/static/prefrence.css" />
 
 <body>
+
   <div class="universe">
+    <div class="loader" id="loader">
+      <div class="loader_div">
+        <svg viewBox="0 0 100 100">
+          <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="6">
+            <!-- left line -->
+            <path d="M 21 40 V 59">
+              <animateTransform attributeName="transform" attributeType="XML" type="rotate" values="0 21 59; 180 21 59"
+                dur="2s" repeatCount="indefinite" />
+            </path>
+            <!-- right line -->
+            <path d="M 79 40 V 59">
+              <animateTransform attributeName="transform" attributeType="XML" type="rotate" values="0 79 59; -180 79 59"
+                dur="2s" repeatCount="indefinite" />
+            </path>
+            <!-- top line -->
+            <path d="M 50 21 V 40">
+              <animate attributeName="d" values="M 50 21 V 40; M 50 59 V 40" dur="2s" repeatCount="indefinite" />
+            </path>
+            <!-- btm line -->
+            <path d="M 50 60 V 79">
+              <animate attributeName="d" values="M 50 60 V 79; M 50 98 V 79" dur="2s" repeatCount="indefinite" />
+            </path>
+            <!-- top box -->
+            <path d="M 50 21 L 79 40 L 50 60 L 21 40 Z">
+              <animate attributeName="stroke" values="rgba(255,255,255,1); rgba(100,100,100,0)" dur="2s"
+                repeatCount="indefinite" />
+            </path>
+            <!-- mid box -->
+            <path d="M 50 40 L 79 59 L 50 79 L 21 59 Z" />
+            <!-- btm box -->
+            <path d="M 50 59 L 79 78 L 50 98 L 21 78 Z">
+              <animate attributeName="stroke" values="rgba(100,100,100,0); rgba(255,255,255,1)" dur="2s"
+                repeatCount="indefinite" />
+            </path>
+            <animateTransform attributeName="transform" attributeType="XML" type="translate" values="0 0; 0 -19"
+              dur="2s" repeatCount="indefinite" />
+          </g>
+        </svg>
+      </div>
+    </div>
+    <div class="dock_container">
+      <div class="upper_dock_part">
+
+      </div>
+      <div class="mid_dock_part">
+        <div class="dock_icons" data-toggle="tooltip" data-bs-placement="right" title="Home"><i
+            class="fa-solid fa-house active_icon"></i>
+          <span class="tooltip">Home</span>
+
+        </div>
+        <div class="dock_icons"><i class="fa-solid fa-paper-plane inactive_icon"></i>
+          <!-- <span class="tooltip">Chat</span> -->
+        </div>
+        <div class="dock_icons"><i class="fa-solid fa-inbox inactive_icon"></i>
+          <!-- <span class="tooltip">Models</span> -->
+        </div>
+        <div id="terminal_dock" data-toggle="tooltip" data-bs-placement="right" title="Terminal" data-bs-toggle="modal"
+          data-bs-target="#terminal_modal">
+          <div class="dock_icons"><i class="fa-solid fa-terminal inactive_icon"></i>
+            <!-- <span class="tooltip">Notifiactions</span> -->
+          </div>
+        </div>
+        <div class="dock_icons"><i class="fa-solid fa-bell inactive_icon"></i>
+          <!-- <span class="tooltip">Notifiactions</span> -->
+        </div>
+        <div class="dock_icons" data-bs-target="#keyboard_shortcut_modal" data-toggle="tooltip"
+          data-bs-placement="right" title="Keyboard Shortcut" data-bs-toggle="modal"><i
+            class="fa-solid fa-keyboard"></i>
+          <!-- <span class="tooltip"></span> -->
+        </div>
+      </div>
+      <div class="bottom_dock-part" id="setting_dock_div" data-toggle="tooltip" data-bs-placement="right"
+        title="Setting" data-bs-toggle="modal" data-bs-target="#settingmodal">
+        <div class="dock_icons"><i class="fa-solid fa-gear inactive_icon"></i>
+          <span class="tooltip">Setting</span>
+        </div>
+      </div>
+    </div>
+    <div class="section_a" id="section_a">
+
+      <div class="section_a_search-container">
+        <div class="section_a_search_input">
+          <input type="text" name="" id="" placeholder="Search .." class="seation_a_search">
+        </div>
+        <div class="section_a_search_btn" data-toggle="tooltip" data-bs-placement="bottom" title="Search">
+          <i class="fa-solid fa-magnifying-glass inactive_icon"></i>
+        </div>
+      </div>
+
+      <div class="new_model_chat_container">
+        <div class="newchat_icon_container">
+          <i class="fa-solid fa-pen-to-square"></i>
+        </div>
+        <div class="newchat_container">
+          Start new chat
+        </div>
+      </div>
+      <div class="section_a_chat_container">
+        <!-- <div class="section_a_chat_breif_container">
+              <div class="chat_breif_holder">
+                  <span class="chat_breif">20</span>
+              </div>
+          </div> -->
+        <div class="section_a_chats_holder" id="section_a_chats_holder">
+          <div class="section_a_chats">
+            <div class="chat_title">
+              <span class="chat_model_title">
+                Mistral
+              </span>
+            </div>
+            <div class="chat_option">
+              <span class="status_icons"><i class="fa-solid fa-circle model_status_active"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
     <div class="container_n">
       <div class="heading">
-        <div>
-          <h2>Ollama Chat</h2>
+        <div class="heading_bar">
+          <div class="toogle_section" id="toogle_section" data-bs-html="true" data-toggle="tooltip"
+            data-bs-placement="right" title="Sidebar<br><u>Ctrl + b</u>">
+            <i class="fa-solid fa-bars-staggered"></i>
+          </div>
+          <span class="model_name" id="model_name">
+            <h2> Ollama Chat</h2>
+          </span>
         </div>
         <select id="select_model_btn">
           Select model
         </select>
         <div class="action_bar">
           <div class="actions">
-
-            <div class="save" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#saave_modal">
-
-              <i class="fa-regular fa-floppy-disk"></i>
-            </div>
-            <div class="cmd_mode " class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#terminal_modal">
-              <i class="fa-solid fa-terminal"></i>
-            </div>
-            <div class="dropdown ">
-              <button class="btn btn-secondary dropdown-toggle " type="button" id="dropdownMenuButton1"
-                data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fa fa-cog"></i>
-              </button>
-              <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton1">
-                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#manage_voice">Manage
-                    Voice</a></li>
-                <!-- <li><a class="dropdown-item" href="#">history</a></li> -->
-                <li>
-                  <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#settingmodal"> Prefrence</a>
-                </li>
-                </button>
-              </ul>
+            <div class="save" class="btn btn-primary" data-toggle="tooltip" data-bs-placement="bottom"
+              title="Download this chat" data-bs-toggle="modal" data-bs-target="#saave_modal">
+              <i class="fa-solid fa-download"></i>
             </div>
           </div>
         </div>
       </div>
       <div id="new_msg"></div>
+      <div class="other_option_input" id="other_option_input">
+
+      </div>
       <div class="input_message">
-        <input type="text" id="userInput" placeholder="Type your message..." />
-        <button id="submitButton">Send</button>
+        <div>
+          <button id="CallButton" data-toggle="tooltip" title="Call" data-bs-placement="top"><i
+              class="fa-solid fa-headphones"></i></button>
+          <input type="file" id="media_file" name="media_file" style="display: none;">
+          <button>
+          <label for="media_file" data-toggle="tooltip" title="Upload Media" data-bs-placement="top">
+              <i class="fa-solid fa-plus"></i>
+            </label>
+          </button>
+        </div>
+        <input type="text" id="userInput" placeholder="/ Type your message..." />
+        <button id="submitButton" data-toggle="tooltip" title="Send Message" data-bs-placement="top"><i
+            class="fa-solid fa-arrow-up"></i></button>
       </div>
     </div>
     <div class="content" id="speech_content">
@@ -106,18 +230,18 @@
           <div class="bar"></div>
           <div class="bar"></div>
         </div>
-        <div>
-          <button id="stopButton">Stop</button>
+        <div style="display: flex; justify-content: center;">
+          <button class="btn" id="stopButton_voice"><i class="fa-solid fa-stop"></i> Stop</button>
         </div>
       </div>
     </div>
   </div>
-  </div>
+
 
   <div class="modal fade custom-bg-modal" id="saave_modal" tabindex="-1" aria-labelledby="saave_modal"
     aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
+    <div class="modal-dialog ">
+      <div class="modal-content custom-bg-modal">
         <div class="modal-header">
           <h5 class="modal-title" id="saave_modal">Save Chat</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -136,40 +260,40 @@
       </div>
     </div>
   </div>
-
-
-  <div class="modal fade custom-bg-modal" id="manage_voice" data-bs-backdrop="static" data-bs-keyboard="false"
-    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content">
+  <div class="modal fade custom-bg-modal" id="keyboard_shortcut_modal" tabindex="-1"
+    aria-labelledby="keyboard_shortcut_modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content custom-bg-modal">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Manage Voice</h5>
+          <h5 class="modal-title" id="saave_modal">keyboard Shortcut</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <label for="voiceSelect">Choose Voice:</label>
-          <select id="voiceSelect"></select><br>
-
-          <label for="pitchInput">Pitch (0 to 2):</label>
-          <input type="range" class="range" id="pitchInput" min="0" max="2" step="0.1" value="1"><br>
-
-          <label for="rateInput">Rate (0.1 to 2):</label>
-          <input type="range" class="range" id="rateInput" min="0.1" max="2" step="0.1" value="1"><br>
-
-          <button id="startButton">Preview Voice</button>
-          <button id="stopButton">Stop</button>
-          <div class="modal-footer">
-            <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
-            <!-- <button type="button" class="btn">save</button> -->
+          <div id="shortcuts" class="shortcuts-container">
+            <h2>Keyboard Shortcuts</h2>
+            <ul class="shortcuts-list">
+              <li>
+                <kbd>Ctrl</kbd> + <kbd>B</kbd>: <span>Toggle the sidebar</span>
+              </li>
+              <li>
+                <kbd>/</kbd> (Slash): <span>Focus on the input area</span>
+              </li>
+              <li>
+                <kbd>Ctrl</kbd> + <kbd>/</kbd> (Slash): <span>Show keyboard shortcuts</span>
+              </li>
+            </ul>
           </div>
+
         </div>
       </div>
     </div>
   </div>
+
+
   <div class="modal fade custom-bg-modal" id="terminal_modal" data-bs-backdrop="static" data-bs-keyboard="false"
     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content">
+      <div class="modal-content custom-bg-modal">
         <div class="modal-header">
           <h5 class="modal-title" id="staticBackdropLabel">Teminal</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -178,10 +302,10 @@
           <div class="terminal-container">
             <div id="terminal-output"></div>
             <div class="terminal-input-line">
-                <span class="terminal-prompt">user@localhost:~$</span>
-                <input type="text" id="terminal-input" autofocus />
+              <span class="terminal-prompt">user@localhost:~$</span>
+              <input type="text" id="terminal-input" autofocus />
             </div>
-        </div>
+          </div>
         </div>
       </div>
     </div>
@@ -198,55 +322,89 @@
         <div class="modal-body">
           <div class="tab">
             <!-- <button class="tablinks" onclick="openTab(event, 'User')" id="defaultOpen">User</button> -->
-            <button class="tablinks" onclick="openTab(event, 'Modal') "id="defaultOpen">Models</button>
-            <!-- <button class="tablinks" onclick="openTab(event, 'ChatUI')">Chat UI</button> -->
+            <button class="tablinks" onclick="openTab(event, 'Modal') " id="defaultOpen"><i
+                class="fa-solid fa-inbox"></i> Models</button>
+            <button class="tablinks" onclick="openTab(event, 'Voice')"><i class="fa-solid fa-microphone-lines"></i>
+              Voices</button>
+            <button class="tablinks" id="viewLogs_btn" onclick="openTab(event, 'viewLogs')"><i
+                class="fa-solid fa-square-binary"></i>
+              System logs</button>
             <!-- <button class="tablinks" onclick="openTab(event, 'System')">System</button> -->
             <!-- <button class="tablinks" onclick="openTab(event, 'Other')">Other</button> -->
-        </div>
-        
-        <div id="User" class="tabcontent">
+          </div>
+
+          <div id="User" class="tabcontent">
             <h3>User</h3>
             <p>Settings related to user configurations will be displayed here.</p>
-        </div>
-        
-        <div id="Modal" class="tabcontent">
+          </div>
+
+          <div id="Modal" class="tabcontent">
             <h3>Modal</h3>
             <div id="modal_container">
 
             </div>
-        </div>
-        
-        <div id="ChatUI" class="tabcontent">
-            <h3>Chat UI</h3>
-            <p>Customize the Chat UI elements and layout here.</p>
-        </div>
-        
-        <div id="System" class="tabcontent">
+          </div>
+
+          <div id="viewLogs" class="tabcontent">
+            <div>
+
+              <span>
+                <h3>System logs</h3>
+                <span class="custom" onclick="display_logs" title="refresh"><i
+                    class="fa-solid fa-rotate-right"></i></span>
+              </span>
+            </div>
+            <div id="logContainer">
+            </div>
+          </div>
+
+          <div id="System" class="tabcontent">
             <h3>System</h3>
             <p>System-related settings and configurations will be displayed here.</p>
-        </div>
-        
-        <div id="Other" class="tabcontent">
-            <h3>Other</h3>
-            <p>Additional settings and information can be added here.</p>
-        </div>
-        
+          </div>
 
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn">save</button>
+          <div id="Voice" class="tabcontent">
+            <div>
+              <h3>Voice</h3>
+              <label for="voiceSelect">Choose Voice:</label>
+              <select id="voiceSelect"></select><br>
+
+              <label for="pitchInput">Pitch (0 to 2):</label>
+              <input type="range" class="range" id="pitchInput" min="0" max="2" step="0.1" value="1"><br>
+
+              <label for="rateInput">Rate (0.1 to 2):</label>
+              <input type="range" class="range" id="rateInput" min="0.1" max="2" step="0.1" value="1"><br>
+              <div>
+                <button id="startButton" class="w-25">Preview Voice</button>
+                <button id="stopButton" class="w-25">Stop</button>
+              </div>
+            </div>
+            <div id="Other" class="tabcontent">
+              <h3>Other</h3>
+              <p>Additional settings and information can be added here.</p>
+            </div>
+
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn">save</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
+
   <div id="notification_pannel"></div>
+  <script src="/static/resource/highlight.min.js"></script>
   <script src="/static/prefrence.js"></script>
   <script src="/static/cmd.js"></script>
   <script src="/static/feature.js"></script>
   <script src="/static/speech.js"></script>
   <script src="/static/script.js"></script>
-  <script src="/static/resource/bootstrap.bundle.min.js"></script>
+  <script src="/static/media.js"></script>
+  <script type="module" src="/static/resource/bootstrap.bundle.min.js"></script>
+  <script type="module" src="/static/extra.js"></script>
   <script src="https://kit.fontawesome.com/0d194b00b9.js" crossorigin="anonymous"></script>
 </body>
 

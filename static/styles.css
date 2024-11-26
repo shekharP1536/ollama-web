@@ -5,30 +5,212 @@
     padding: 0;
 }
 
+:root {
+    --base_grey: #262626;
+    --base_light_icon: rgb(206, 206, 206);
+    --base_active_icon: #ffffff;
+    --base_green: #44d7b6;
+    --base_main: #1e1e2f;
+    --base_input_active: #393a4f;
+    --base_input: #393a4f79;
+    --base_secondary: #663399;
+}
+
 body {
     font-family: 'Roboto', sans-serif;
-    background-color: #1e1e2f; /* Darker background for a modern look */
+    background-color: #1e1e2f;
+    /* Darker background for a modern look */
     color: #e0e0e0;
     line-height: 1.6;
 }
+
 /* universe
  */
- .universe{
+.universe {
     display: flex;
     justify-content: space-around;
- }
+}
+
+.dock_container {
+    width: 80px;
+    position: fixed;
+    left: 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* dock_degination */
+.active_icon {
+    color: var(--base_active_icon);
+    border-bottom: 5px solid grey;
+    padding-bottom: 10px;
+    border-radius: 5px;
+}
+
+.dock_container .mid_dock_part,
+.bottom_dock-part {
+    font-size: 20px;
+    margin: 10px;
+}
+
+.mid_dock_part {
+    display: flex;
+    flex-direction: column;
+}
+
+.dock_icons {
+    margin: 30px 0px 30px 0px;
+    cursor: pointer;
+}
+
+.dock_icons:hover i {
+    color: #44d7b6;
+}
+
+.inactive_icon {
+    color: var(--base_light_icon);
+}
+
+.sections_holder {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+/* Section_a 
+ */
+
+.section_a {
+    display: flex;
+    width: 350px;
+    position: relative;
+    left: 15px;
+    flex-direction: column;
+    margin: 10px 15px 1px 5px;
+}
+
+.section_view {
+    display: none;
+}
+
+/*Section a customiztion*/
+.section_a div {
+    margin: 2px 3px;
+    /* overflow-y: auto; */
+}
+
+
+.new_model_chat_container {
+    /* background-color: white; */
+    position: sticky;
+    top: 0px;
+    box-shadow: 10px 10px 36px -1px rgba(0, 0, 0, 0.05);
+    -webkit-box-shadow: 10px 10px 36px -1px rgba(0, 0, 0, 0.05);
+    -moz-box-shadow: 10px 10px 36px -1px rgba(0, 0, 0, 0.05);
+    border-radius: 15px;
+    display: flex;
+    padding: 2px 10px;
+    text-align: center;
+    cursor: pointer;
+    justify-content: center;
+}
+
+.new_model_chat_container:hover {
+    color: var(--base_active_icon);
+    box-shadow: 10px 10px 36px -1px rgba(0, 0, 0, 0.15);
+    -webkit-box-shadow: 10px 10px 36px -1px rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 10px 10px 36px -1px rgba(0, 0, 0, 0.15);
+}
+
+.section_a_search-container {
+    display: flex;
+    align-items: baseline;
+    border-radius: 20px;
+    box-shadow: 10px 10px 36px -1px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 10px 10px 36px -1px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 10px 10px 36px -1px rgba(0, 0, 0, 0.1);
+    border: 1px solid lightgrey;
+}
+
+.section_a_search-container {
+    border: 1px;
+    outline: none;
+}
+
+.section_a_search_input input {
+    width: auto;
+    font-size: 20px;
+    border-radius: 10px;
+    background-color: transparent;
+    text-decoration: none;
+    color: white;
+    padding: 1px 20px;
+    outline: none;
+    border: none;
+}
+
+.section_a_search_input input:focus {
+    outline: none;
+    border: none;
+    text-decoration: none;
+}
+
+.section_a_search_btn {
+    cursor: pointer;
+}
+
+/*Section_a chat_container_editing_here*/
+.section_a_chat_container {
+    overflow-y: auto;
+    border-radius: 10px;
+    height: 100%;
+    /* flex-direction: column; */
+}
+
+.section_a_chats {
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--base_secondary);
+    border-radius: 10px;
+    cursor: pointer;
+    padding: 2px 10px;
+}
+
+.section_a_chat_breif_container {
+    margin: 2px 1px;
+}
+
 /* Main Container */
 .container_n {
     width: 100%;
     max-width: 1000px;
-    margin: 10px;
     padding: 20px;
-    background-color: #28293d;
     border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
-    height: 95vh; /* Full-height for the chat area */
+    height: 100vh;
+    /* Full-height for the chat area */
+}
+
+.loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0px;
+    background-color: #1e1e2f9f;
+}
+
+.loader_div {
+    display: block;
+    margin: auto;
+    position: fixed;
+    width: 300px;
+    height: 300px;
 }
 
 /* Header */
@@ -42,7 +224,28 @@ body {
 
 .heading h2 {
     font-size: 26px;
-    color: #bb86fc; /* Soft purple for a modern touch */
+    color: #bb86fc;
+    /* Soft purple for a modern touch */
+}
+
+/* Headingbar */
+.heading_bar {
+    display: flex;
+    padding: 4px;
+}
+
+.heading div {
+    margin: 0px 20px;
+    font-size: 25px;
+}
+
+.toogle_section {
+    margin: 10px 10px;
+}
+
+.toogle_section :hover {
+    background-color: #2a243d;
+    transition: 0.5s;
 }
 
 /* Chat Area */
@@ -54,9 +257,9 @@ body {
     overflow-y: auto;
     margin-bottom: 20px;
     padding: 10px;
-    background-color: #393a4f;
+    /* background-color: #393a4f; */
     border-radius: 12px;
-    border: 1px solid #4b4c5e; /* Subtle border for contrast */
+    /* border: 1px solid #4b4c5e; Subtle border for contrast */
 }
 
 /* Message Bubbles */
@@ -73,17 +276,17 @@ body {
 
 /* User and Bot Messages */
 .user-message {
-    background-color: #4e5d78;
+    /* background-color: #4e5d78; */
     align-self: flex-end;
     color: #fff;
-    border-radius: 18px 18px 4px 18px;
+    /* border-radius: 18px 18px 4px 18px; */
     margin-left: auto;
 }
 
 .bot-message {
-    background-color: #6b705c;
+    /* background-color: #6b705c; */
     color: #fff;
-    border-radius: 18px 18px 18px 4px;
+    /* border-radius: 18px 18px 18px 4px; */
     margin-right: auto;
 }
 
@@ -101,8 +304,9 @@ body {
     display: flex;
     align-items: center;
     margin-top: 10px;
-    background-color: #2e2f42;
-    border-radius: 12px;
+    border-bottom: 2px solid rebeccapurple;
+    background-color: var(--base_main);
+    /* border-radius: 12px; */
     padding: 5px;
 }
 
@@ -112,7 +316,7 @@ body {
     border: none;
     border-radius: 8px;
     font-size: 16px;
-    background-color: #393a4f;
+    background-color: var(--base_main);
     color: #e0e0e0;
     outline: none;
 }
@@ -120,57 +324,81 @@ body {
 button {
     padding: 12px 18px;
     border: none;
-    border-radius: 8px;
+    border-radius: 50px;
     color: #ffffff;
-    background-color: #bb86fc;
+    background-color: var(--base_main);
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
     font-size: 16px;
 }
 
 button:hover {
-    background-color: #9f62e8;
+    border: none;
+    border-bottom: 3px;
     transform: translateY(-2px);
+    background-color: var(--base_input_active);
 }
-.message:hover p.copy{
-    visibility: visible ;
+
+.message:hover p.copy {
+    visibility: visible;
 }
-.copy{
+
+.copy {
     visibility: hidden;
 }
 
 select {
-    appearance: none; /* Removes default dropdown arrow */
-    -webkit-appearance: none; /* Removes default dropdown arrow for WebKit browsers */
-    -moz-appearance: none; /* Removes default dropdown arrow for Firefox */
-    max-width: 300px; /* Width of the select element */
-    padding: 10px; /* Padding inside the select box */
-    font-size: 16px; /* Font size */
-    font-family: 'Arial', sans-serif; /* Font family */
-    border: 2px solid #ccc; /* Border color */
-    border-radius: 8px; /* Rounded corners */
-    background-color: #2a243d; /* Light background color */
-    color: #edc5fe; /* Text color */
-    cursor: pointer; /* Pointer cursor on hover */
-    position: relative; /* For positioning the custom dropdown arrow */
+    appearance: none;
+    /* Removes default dropdown arrow */
+    -webkit-appearance: none;
+    /* Removes default dropdown arrow for WebKit browsers */
+    -moz-appearance: none;
+    /* Removes default dropdown arrow for Firefox */
+    max-width: 300px;
+    /* Width of the select element */
+    padding: 10px;
+    /* Padding inside the select box */
+    font-size: 16px;
+    /* Font size */
+    border: none;
+    outline: none;
+    font-family: 'Arial', sans-serif;
+    /* Font family */
+    border-radius: 8px;
+    /* Rounded corners */
+    background-color: #2a243d;
+    /* Light background color */
+    color: #edc5fe;
+    /* Text color */
+    cursor: pointer;
+    /* Pointer cursor on hover */
+    position: relative;
+    /* For positioning the custom dropdown arrow */
 }
 
 select:focus {
-    border-color: #007bff; /* Border color on focus */
-    outline: none; /* Remove outline on focus */
+    border-color: #007bff;
+    /* Border color on focus */
+    outline: none;
+    /* Remove outline on focus */
 }
 
 select option {
-    padding: 10px; /* Padding inside each option */
+    padding: 10px;
+    /* Padding inside each option */
 }
 
 select::after {
-    content: ' ▼'; /* Adds a custom arrow */
+    content: ' ▼';
+    /* Adds a custom arrow */
     position: absolute;
-    right: 10px; /* Position the arrow */
+    right: 10px;
+    /* Position the arrow */
     top: 50%;
-    transform: translateY(-50%); /* Center the arrow vertically */
-    pointer-events: none; /* Prevents the arrow from blocking clicks */
+    transform: translateY(-50%);
+    /* Center the arrow vertically */
+    pointer-events: none;
+    /* Prevents the arrow from blocking clicks */
 }
 
 
@@ -226,36 +454,146 @@ select::after {
 #new_msg::-webkit-scrollbar-thumb:hover {
     background-color: #9f62e8;
 }
-i:hover{
+
+i:hover {
     /* font-size: 20px; */
     cursor: pointer;
 }
+
 code {
-    display: block; /* Makes the code appear on a new line */
-    background-color: #6d6d6d; /* Light background color */
-    border-radius: 4px; /* Rounded corners for a soft look */
-    padding: 10px; /* Adds padding inside the code block */
-    font-family: 'Courier New', Courier, monospace; /* Monospace font for code */
-    font-size: 14px; /* Adjust font size */
-    color: #ffffff; /* Text color */
-    white-space: pre-wrap; /* Preserves spaces and line breaks */
-    word-wrap: break-word; /* Allows long words to break and wrap to the next line */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow around the block */
-    margin: 10px 0; /* Adds spacing above and below the code block */
+    white-space: pre-wrap;
+    display: block;
+    /* Makes the code appear on a new line */
+    background-color: #000000;
+    /* Light background color */
+    border-radius: 4px;
+    /* Rounded corners for a soft look */
+    padding: 10px 20px;
+    /* Adds padding inside the code block */
+    font-family: 'Courier New', Courier, monospace;
+    /* Monospace font for code */
+    font-size: 14px;
+    /* Adjust font size */
+    color: #ffffff;
+    /* Text color */
+    white-space: pre-wrap;
+    /* Preserves spaces and line breaks */
+    word-wrap: break-word;
+    /* Allows long words to break and wrap to the next line */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* Adds a subtle shadow around the block */
+    margin: 10px 0;
+    /* Adds spacing above and below the code block */
 }
-.action_bar{
+
+.action_bar {
     display: flex;
     flex-direction: row;
 }
-.actions{
+
+.actions {
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin: 0px 3px;
-    padding: 3px;
+
 }
-.actions div{
-    padding: 10px;
+
+.actions div {
     margin: 0pxc 4px;
     font-size: 20px;
+}
+
+.shortcuts-container {
+    font-family: Arial, sans-serif;
+    padding: 1em;
+    border-radius: 8px;
+    /* max-width: 300px; */
+}
+
+.shortcuts-container h2 {
+    font-size: 1.25em;
+    margin-bottom: 0.5em;
+}
+
+.shortcuts-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.shortcuts-list li {
+    margin: 0.5em 0;
+}
+
+kbd {
+    /* background-color: #eee; */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.9em;
+    padding: 0.2em 0.4em;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/* General styling for the parent container */
+#other_option_input {
+    font-family: Arial, sans-serif;
+    margin-top: 10px;
+}
+
+/* Media tag styling */
+.media-tag {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color:#080808 ;
+    border: 1px solid #080808;
+    border-radius: 20px;
+    padding: 8px 15px;
+    margin: 8px 0;
+    max-width:300px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+    cursor: default;
+}
+
+.media-tag:hover {
+    transform: scale(1.02);
+}
+
+/* Content section of the tag */
+.media-tag-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+/* Name and size styling */
+.media-tag-name {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+
+.media-tag-size {
+    font-size: 12px;
+    color: #777;
+    margin: 0;
+}
+
+/* Close button styling */
+.media-tag-close {
+    font-size: 14px;
+    font-weight: bold;
+    color: #ff5b5b;
+    background-color: transparent;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.media-tag-close:hover {
+    background-color: #ff5b5b;
+    color: #fff;
 }

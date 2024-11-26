@@ -4,9 +4,47 @@ var mic_on_not = new Audio("static/resource/mic_on_effect.mp3");
 var mic_off_not = new Audio("static/resource/mic_off_effect.mp3");
 var outlines = document.getElementsByClassName("outline"); // Changed outline to outlines
 var prompt = "";
+var ses_log = "";
 var allow_user_mic = false
 var first_time = true;
 let need_speaker = false;
+
+let recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+if (recognition) {
+  recognition = new recognition();
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.lang = 'en-US';
+
+  recognition.onstart = () => {
+
+    console.log('Recording started');
+  };
+
+  recognition.onresult = function (event) {
+    prompt = '';
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      if (event.results[i].isFinal) {
+        prompt += event.results[i][0].transcript + ' ';
+      } else {
+        prompt += event.results[i][0].transcript;
+      }
+    }
+
+    sst_content.innerHTML = prompt;
+    if (prompt.toLowerCase().includes('stop recording')) {
+      sst_content.innerText = prompt.replace(/stop recording/gi, '');
+      stopRecording();
+    }
+  }
+}
+recognition.onerror = function (event) {
+  console.error('Speech recognition error:', event.error);
+
+}
+recognition.onend =  ()=>{
+  console.log('Speech recognition ended');
+}
 mic_button.addEventListener("click", () => {
   console.log(first_time);
   if (mic_button.checked) {
@@ -16,20 +54,20 @@ mic_button.addEventListener("click", () => {
     prompt = "";
     allow_user_mic = true
     send_cmd("mic_on");
-    if(first_time){
-      var i = 10;
-      const interval = setInterval(() => {
-        if(i>=1){ 
-          sst_content.innerHTML = `First time it may take time to start mic wait ${i}`;
-          i--;
-        }else{
-          first_time = false;
-          clearInterval(interval);
-          sst_content.innerHTML = `Speak Now and stop once reponse is compeleted`;
+    // if(first_time){
+    //   var i = 10;
+    //   const interval = setInterval(() => {
+    //     if(i>=1){ 
+    //       sst_content.innerHTML = `First time it may take time to start mic wait ${i}`;
+    //       i--;
+    //     }else{
+    //       first_time = false;
+    //       clearInterval(interval);
+    //       sst_content.innerHTML = `Speak Now and stop once reponse is compeleted`;
           
-        }
-      }, 1000);
-    }
+    //     }
+    //   }, 1000);
+    // }
     need_speaker = true;
     for (let outline of outlines) {
       // Loop through outlines correctly
@@ -52,19 +90,30 @@ mic_button.addEventListener("click", () => {
   }
 });
 
+// function send_cmd(cmd) {
+//   fetch("/get_cmd", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({ cmd: cmd }),
+//   })
+//     .then((response) => response.json())
+//     .then((data) => {
+//       console.log("received:", data);
+//     })
+//     .catch((error) => console.error("Error:", error));
+// }
+
 function send_cmd(cmd) {
-  fetch("/get_cmd", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ cmd: cmd }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("received:", data);
-    })
-    .catch((error) => console.error("Error:", error));
+  if (cmd == "mic_on") {
+    sst_content.innerHTML = "";
+    recognition.start();
+  } else {
+    console.log('We stoped_recording');
+    recognition.stop();
+    
+  }
 }
 
 function send_mic_input(userPrompt) {
@@ -216,6 +265,7 @@ save_con_btn.addEventListener("click", () => {
       a.remove();
       window.URL.revokeObjectURL(url);
       showNotification("File downloaded.")
+      save_log("File downloaded.")
     })
     .catch((error) => console.error(error));
 });
@@ -229,6 +279,37 @@ function showNotification(message) {
     messageElement.style.display = "none";
   }, 5000);
 }
+function save_log(log , category) {
+  if(category = "undefined" || category ==""){
+    category = "INFO"
+  }
+  var time = new Date();
+  var log_line = `${time} ${category} ${log}\n`; // Use '\n' for a new line
+  console.log(log_line);
+  ses_log += log_line; // Append log line to ses_log
+}
+function display_logs() {
+  logContainer.innerHTML = "Checking..."
+  // logContainer.innerHTML = "Loading..."; // Clear previous logs
+  if(ses_log != ""){
+    console.log("logfound");
+    const logContainer = document.getElementById("logContainer");
+    logContainer.innerHTML = ""; // Clear previous logs
+
+    // Split logs into an array of lines and create HTML elements
+    const logEntries = ses_log.split("\n").filter((line) => line.trim() !== ""); // Remove empty lines
+    logEntries.forEach((entry) => {
+      const logElement = document.createElement("div");
+      logElement.className = "log-entry";
+      logElement.textContent = entry;
+      logContainer.appendChild(logElement);
+    });
+  }
+  else{
+    logContainer.innerHTML = "No log found!";
+  }
+}
+document.getElementById("viewLogs_btn").addEventListener("click", display_logs);
 messageElement.addEventListener("click", function () {
   messageElement.style.display = "none";
 });

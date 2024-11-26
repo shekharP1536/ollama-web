@@ -2,6 +2,7 @@ const messageDiv = document.getElementById("new_msg");
 let currentSpeaker = null;
 let messageContent = "";
 let loadingIndicator;
+let code_block = true;
 let flow = false;
 const sentences = [];
 let currentSentence = "";
@@ -9,14 +10,11 @@ marked.use({
   mangle: false,
   headerIds: false,
 });
-
 // Initialize the page and populate model list on load
 document.addEventListener("DOMContentLoaded", get_list);
-
 // Function to start a new message
 function startMessage(speaker) {
-  const modelName =
-    document.getElementById("select_model_btn").value || "Model";
+  const modelName = document.getElementById("select_model_btn").value || "Model";
   endMessage(); // Close any open messages
 
   currentSpeaker = speaker;
@@ -31,9 +29,8 @@ function startMessage(speaker) {
   // Create a container for the speaker's name
   const speakerNameContainer = document.createElement("div");
   speakerNameContainer.classList.add("speaker-name");
-  speakerNameContainer.innerHTML = `<strong>${
-    speaker === "user" ? "You" : modelName
-  }:</strong>`;
+  speakerNameContainer.innerHTML = `<strong>${speaker === "user" ? "You" : modelName
+    }:</strong>`;
   messageContainer.appendChild(speakerNameContainer);
 
   // Create a container for the response content
@@ -62,173 +59,207 @@ function startMessage(speaker) {
 
   if (speaker === "bot" && loadingIndicator) {
     loadingIndicator.remove();
+    console.log("loadingremoved");
+    
   }
 }
-
 // Function to add content to the current message
 function addContent(content) {
   if (content !== undefined && content !== "") {
     response_content += content; // Append chunk to the response content
-    var new_response = DOMPurify.sanitize(marked.parse(response_content));
-    messageContent.innerHTML = new_response; // Update message display
-    messageContent.scrollTop = messageContent.scrollHeight;
-    // console.log(currentSpeaker);
-    if (currentSpeaker == "bot") {
-      if (need_speaker) {
-        text += content; // Append chunk to form a sentence
-        // console.log("Collecting text:", text);
+    
+    // If marked.parse was async, you would await it like this:
+    const new_response = DOMPurify.sanitize(marked.parse(response_content));
 
-        // Check if this chunk completes a sentence
+    messageContent.innerHTML = new_response; // Update message display
+    messageDiv.scrollHeight;
+    // console.log(new_response);
+
+    if (currentSpeaker == "bot") {
+     
+      if (need_speaker) {
+        text += content; // Buffer the content to form a sentence
+        // Check if the sentence is complete
         if (isSentenceComplete(text)) {
           console.log("Sentence completed:", text);
-          textQueue.push(text.trim()); // Queue the complete sentence
-          text = ""; // Clear the buffer for the next sentence
-          processQueue(); // Check the queue and start TTS if idle
+          textQueue.push(text.trim()); // Add complete sentence to the queue
+          text = "";  // Clear the buffer for the next sentence
+          processQueue();  // Check and process the queue
         }
       }
     }
   }
 }
+function highlightAll() {
+  // Get the last child div of the element with id 'new_msg'
+  const last_div = document.querySelector('#new_msg > div:last-child');
+  
+  if (last_div) {
+    // Find all 'code' elements within the last div
+    last_div.querySelectorAll('code').forEach(el => {
+      console.log("Before sanitizing:", el.innerHTML);
 
-// Function to determine if a sentence is complete
-function isSentenceComplete(text) {
-  return /[.?]\s*$/.test(text.trim()); // Ends in a sentence-terminating punctuation
-}
-
-function processQueue() {
-  if (!isSpeaking && textQueue.length > 0) {
-    const sentence = textQueue.shift(); // Get the next sentence from the queue
-    cleanText(sentence); // Prepare the text and start TTS
-    isSpeaking = true; // Set speaking status to true while TTS is active
+      // Sanitize the code bloc
+      // Highlight each code element
+      hljs.highlightElement(el);
+    });
+  } else {
+    console.warn('No divs found inside #new_msg');
   }
 }
 
-// Function to end the current message and optionally show a loading indicator
-function endMessage() {
-  cleanText(text);
-  text = "";
-  response_content = "";
-  flow = false;
-  if (currentSpeaker === "user") {
-    showLoadingIndicator("Processing...");
+
+  // Function to determine if a sentence is complete
+  function isSentenceComplete(text) {
+    return /[.?]\s*$/.test(text.trim()); // Ends in a sentence-terminating punctuation
   }
-  currentSpeaker = null;
+
+  function processQueue() {
+    if (!isSpeaking && textQueue.length > 0) {
+      sentence = textQueue.shift(); // Get the next sentence from the queue
+      cleanText(sentence); // Prepare the text and start TTS
+      isSpeaking = true; // Set speaking status to true while TTS is active
+    }
+  }
+  function endMessage() {
+    highlightAll();
+    cleanText(text);
+    text = "";
+    response_content = "";
+    flow = false;
+    if (currentSpeaker === "user") {
+      console.log("user");
+      showLoadingIndicator("Thinking...")
+    }
+    currentSpeaker = null;
+  }
+  function showLoadingIndicator(text) {
+    // Create the loading indicator element
+    loadingIndicator = document.createElement("div");
+    loadingIndicator.className = "loading";
+    loadingIndicator.innerHTML = text;
+    // Ensure messageContent is defined and append the loading indicator
+    if (messageContent) {
+        messageDiv.appendChild(loadingIndicator);
+        console.log(messageDiv, loadingIndicator);
+        
+    } else {
+        console.error("messageContent is not defined");
+    }
 }
 
-// Function to show a loading indicator
-function showLoadingIndicator(text) {
-  loadingIndicator = document.createElement("div");
-  loadingIndicator.classList.add("loading-indicator");
-  loadingIndicator.innerHTML = text;
-  messageDiv.appendChild(loadingIndicator);
-}
-
-// Function to handle user input and send it to the server
-function sendUserInput() {
-  const inputField = document.getElementById("userInput");
-  const userPrompt = inputField.value.trim();
+function set_model(){
   const modelSelected = document.getElementById("select_model_btn").value;
 
-  if (!modelSelected) {
-    alert("Please select a model");
-    return;
+}
+  // Function to handle user input and send it to the server
+  function sendUserInput() {
+    const inputField = document.getElementById("userInput");
+    const userPrompt = inputField.value.trim();
+    const modelSelected = document.getElementById("select_model_btn").value;
+
+    if (!modelSelected) {
+      alert("Please select a model");
+      return;
+    }
+
+    if (userPrompt) {
+      fetch("/get_response", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: userPrompt, model_need: modelSelected }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Response received:", data.response);
+        })
+        .catch((error) => console.error("Error:", error));
+
+      inputField.value = ""; // Clear input field
+    }
   }
 
-  if (userPrompt) {
-    fetch("/get_response", {
+  // Function to create options for the model selection dropdown
+  function createModelOption(name) {
+    const selectElement = document.getElementById("select_model_btn");
+    const option = document.createElement("option");
+    option.value = name;
+    option.textContent = name;
+    selectElement.appendChild(option);
+  }
+
+  // Fetch the list of models from the server and populate the dropdown
+  function get_list() {
+    fetch("/list_request", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: userPrompt, model_need: modelSelected }),
+      body: JSON.stringify({ request: "list_of_llm" }),
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Response received:", data.response);
+        localStorage.setItem("list", JSON.stringify(data));
+        data.list.models.forEach((model) => createModelOption(model.name));
+        data.list.models.forEach((model) => createModalList(model.name));
+        showNotification("List fetched successfully");
+        save_log("List fetched successfully");
       })
-      .catch((error) => console.error("Error:", error));
-
-    inputField.value = ""; // Clear input field
+      .catch((error) => console.error("Fetch error:", error));
   }
-}
 
-// Function to create options for the model selection dropdown
-function createModelOption(name) {
-  const selectElement = document.getElementById("select_model_btn");
-  const option = document.createElement("option");
-  option.value = name;
-  option.textContent = name;
-  selectElement.appendChild(option);
-}
+  // Event listeners for submitting input
+  document.getElementById("submitButton").onclick = sendUserInput;
+  document.getElementById("userInput").addEventListener("keypress", (event) => {
+    if (!flow && event.key === "Enter") sendUserInput();
+  });
 
-// Fetch the list of models from the server and populate the dropdown
-function get_list() {
-  fetch("/list_request", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ request: "list_of_llm" }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      localStorage.setItem("list", JSON.stringify(data));
-      data.list.models.forEach((model) => createModelOption(model.name));
-      data.list.models.forEach((model) => createModalList(model.name));
-      showNotification("List fetched successfully");
-    })
-    .catch((error) => console.error("Fetch error:", error));
-}
-
-// Event listeners for submitting input
-document.getElementById("submitButton").onclick = sendUserInput;
-document.getElementById("userInput").addEventListener("keypress", (event) => {
-  if (!flow && event.key === "Enter") sendUserInput();
-});
-
-// Function to enable or disable input based on action
-function action(isProcessing) {
-  flow = isProcessing;
-  document.getElementById("submitButton").disabled = isProcessing;
-  console.log(isProcessing ? "Disabled" : "Enabled");
-}
-
-// Event listener for receiving server messages
-const eventSource = new EventSource("/stream_response");
-eventSource.onmessage = function (event) {
-  const response = event.data;
-  switch (response) {
-    case "[|/__USER_START__/|]":
-      startMessage("user");
-      break;
-    case "[|/__USER_END__/|]":
-      text = "";
-      endMessage();
-      break;
-    case "[|/__START__/|]":
-      text = "";
-      action(true);
-      startMessage("bot");
-
-      break;
-    case "[|/__DONE__/|]":
-      endMessage();
-      action(false);
-      break;
-    default:
-      addContent(response);
-      break;
+  // Function to enable or disable input based on action
+  function action(isProcessing) {
+    flow = isProcessing;
+    document.getElementById("submitButton").disabled = isProcessing;
+    console.log(isProcessing ? "Disabled" : "Enabled");
   }
-};
 
-// Function to copy text to clipboard
-function copyToClipboard(text) {
-  const textArea = document.createElement("textarea");
-  textArea.value = text;
-  document.body.appendChild(textArea);
-  textArea.select();
-  document.execCommand("copy");
-  showNotification("Copied");
-  document.body.removeChild(textArea);
-  // alert("Copied to clipboard!");
-}
-const lastMessage = messageDiv.lastElementChild;
-if (lastMessage) {
-  lastMessage.scrollIntoView({ behavior: "smooth" });
-}
+  // Event listener for receiving server messages
+  const eventSource = new EventSource("/stream_response");
+  eventSource.onmessage = function (event) {
+    const response = event.data;
+    switch (response) {
+      case "[|/__USER_START__/|]":
+        startMessage("user");
+        break;
+      case "[|/__USER_END__/|]":
+        text = "";
+        endMessage();
+        break;
+        case "[|/__START__/|]":
+          text = "";
+          action(true);
+          startMessage("bot");
+
+        break;
+      case "[|/__DONE__/|]":
+        endMessage();
+        action(false);
+        break;
+      default:
+        addContent(response);
+        break;
+    }
+  };
+
+  // Function to copy text to clipboard
+  function copyToClipboard(text) {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand("copy");
+    showNotification("Copied");
+    save_log("coppied : " + text)
+    document.body.removeChild(textArea);
+    // alert("Copied to clipboard!");
+  }
+  const lastMessage = messageDiv.lastElementChild;
+  if (lastMessage) {
+    lastMessage.scrollIntoView({ behavior: "smooth" });
+  }
