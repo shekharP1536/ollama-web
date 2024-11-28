@@ -172,7 +172,7 @@ body {
 .section_a_chats {
     display: flex;
     justify-content: space-between;
-    background-color: var(--base_secondary);
+    background-color: #29233c;
     border-radius: 10px;
     cursor: pointer;
     padding: 2px 10px;
@@ -181,12 +181,14 @@ body {
 .section_a_chat_breif_container {
     margin: 2px 1px;
 }
-
+.section_a_chats:hover{
+    background-color: var(--base_secondary);
+}
 /* Main Container */
 .container_n {
     width: 100%;
     max-width: 1000px;
-    padding: 20px;
+    padding: 5px;
     border-radius: 12px;
     display: flex;
     flex-direction: column;
@@ -265,7 +267,7 @@ body {
 /* Message Bubbles */
 .message {
     display: inline-block;
-    padding: 10px 15px;
+    /* padding: 10px 15px; */
     border-radius: 18px;
     margin: 6px 0;
     max-width: 75%;
@@ -442,16 +444,16 @@ select::after {
 }
 
 /* Scrollbar Styles */
-#new_msg::-webkit-scrollbar {
+::-webkit-scrollbar {
     width: 8px;
 }
 
-#new_msg::-webkit-scrollbar-thumb {
-    background-color: #bb86fc;
+::-webkit-scrollbar-thumb {
+    background-color: #bb86fc63;
     border-radius: 4px;
 }
 
-#new_msg::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
     background-color: #9f62e8;
 }
 

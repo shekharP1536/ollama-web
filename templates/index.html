@@ -4,7 +4,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script src="/static/resource/marked.min.js" crossorigin="anonymous"></script>
   <script src="/static/resource/purify.min.js" crossorigin="anonymous"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,7 +15,6 @@
   <title>Ollama Chat</title>
 </head>
 <link rel="stylesheet" href="/static/resource/an-old-hope.min.css">
-
 <link rel="stylesheet" href="/static/resource/bootstrap.css" />
 <link rel="stylesheet" href="/static/styles.css" />
 <link rel="stylesheet" href="/static/extra.css" />
@@ -114,7 +112,7 @@
         </div>
       </div>
 
-      <div class="new_model_chat_container">
+      <div class="new_model_chat_container" id="new_model_chat_container">
         <div class="newchat_icon_container">
           <i class="fa-solid fa-pen-to-square"></i>
         </div>
@@ -129,16 +127,7 @@
               </div>
           </div> -->
         <div class="section_a_chats_holder" id="section_a_chats_holder">
-          <div class="section_a_chats">
-            <div class="chat_title">
-              <span class="chat_model_title">
-                Mistral
-              </span>
-            </div>
-            <div class="chat_option">
-              <span class="status_icons"><i class="fa-solid fa-circle model_status_active"></i></span>
-            </div>
-          </div>
+          
         </div>
       </div>
 
@@ -181,12 +170,12 @@
             </label>
           </button>
         </div>
-        <input type="text" id="userInput" placeholder="/ Type your message..." />
+        <input type="text" id="userInput" placeholder="/ Type your message..." value="simple python synatax"/>
         <button id="submitButton" data-toggle="tooltip" title="Send Message" data-bs-placement="top"><i
             class="fa-solid fa-arrow-up"></i></button>
       </div>
     </div>
-    <div class="content" id="speech_content">
+    <div class="content none" id="speech_content">
       <div class="box">
         <div class="object">
           <div class="outline">
@@ -311,10 +300,10 @@
     </div>
   </div>
   </div>
-  <div class="modal fade custom-bg-modal" id="settingmodal" data-bs-backdrop="static" data-bs-keyboard="false"
+  <div class="modal fade custom-bg-modal .modal-xl" id="settingmodal" data-bs-backdrop="static" data-bs-keyboard="false"
     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg  modal-dialog-centered modal-dialog-scrollable w-75 p-3">
-      <div class="modal-content custom-bg-modal">
+      <div class="modal-content custom-bg-modal custom-bg-modal">
         <div class="modal-header">
           <h5 class="modal-title" id="staticBackdropLabel">Prefrence</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -375,7 +364,7 @@
               <label for="rateInput">Rate (0.1 to 2):</label>
               <input type="range" class="range" id="rateInput" min="0.1" max="2" step="0.1" value="1"><br>
               <div>
-                <button id="startButton" class="w-25">Preview Voice</button>
+                <button id="startButton" class="">Preview Voice</button>
                 <button id="stopButton" class="w-25">Stop</button>
               </div>
             </div>
@@ -397,6 +386,7 @@
 
   <div id="notification_pannel"></div>
   <script src="/static/resource/highlight.min.js"></script>
+  <script src="/static/resource/markdown.js"></script>
   <script src="/static/prefrence.js"></script>
   <script src="/static/cmd.js"></script>
   <script src="/static/feature.js"></script>

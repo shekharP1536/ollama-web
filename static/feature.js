@@ -138,17 +138,6 @@ function send_mic_input(userPrompt) {
   }
 }
 
-const STT_source = new EventSource("/sst_event");
-STT_source.onmessage = function (event) {
-  if(allow_user_mic){
-    const resp = event.data;
-  console.log(resp);
-  prompt += resp;
-  sst_content.innerHTML += resp;
-  }else
-  console.log("User not allowed this")
-  
-};
 // Handeling tab is setting modal
 function openTab(evt, tabName) {
   var i, tabcontent, tablinks;

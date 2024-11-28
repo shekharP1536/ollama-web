@@ -9,3 +9,8 @@ templates/style.css
 .gitignore
 /python
 .vscode/settings.json
+static/resource/20241126011143_Notification-and-Programme-for-BTech-RIST-Odd-Semester-December-2024.pdf
+static/resource/an-old-hope.min.css
+/.gitignore
+from ollama import chat.py
+demo.html
