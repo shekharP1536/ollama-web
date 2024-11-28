@@ -16,7 +16,7 @@ function convertMarkdownToHTML(md) {
         console.log(language);
 
         result += `
-        <div class="code_div"><span style="margin: 10px;">${ language || 'code'}</span><pre class="language-${language || 'text'}"><button class="copy-button" onclick="copyCode(this)">Copy</button><code>`;
+        <div class="code_div"><span style="margin: 10px;">${language || 'code'}</span><pre class="language-${language || 'text'}"><button class="copy-button" onclick="copyCode(this)">Copy</button><code>`;
       } else {
         // End of a code block
         inCodeBlock = false;
@@ -81,6 +81,8 @@ function convertMarkdownToHTML(md) {
   }, 2000);
 }
 function highlightAll(text) {
+  // console.log(text);
+
   // Ensure the text is a valid string
   if (typeof text !== 'string') {
     console.error("Invalid argument: 'text' must be a string.");
@@ -91,9 +93,13 @@ function highlightAll(text) {
   const tempDiv = document.createElement('div');
   tempDiv.innerHTML = text;  // Set the text as HTML content
 
+  console.log(tempDiv);
   // Get all the <code> elements inside the temporary element
-  const codeElements = tempDiv.querySelectorAll('code');
 
+  const parser = new DOMParser();
+  const decodedHTML = parser.parseFromString(text, 'text/html').body.innerHTML;
+  tempDiv.innerHTML = decodedHTML;
+  const codeElements = tempDiv.querySelectorAll('code');
   // If no <code> blocks are found, return the original text
   if (codeElements.length === 0) {
     console.log("No code blocks found.");

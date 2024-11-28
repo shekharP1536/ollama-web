@@ -97,7 +97,6 @@ function startMessage(speaker) {
   if (speaker === "bot" && loadingIndicator) {
     loadingIndicator.remove();
     console.log("loadingremoved");
-
   }
 }
 // Function to add content to the current message
@@ -166,42 +165,107 @@ function set_model() {
   const modelSelected = document.getElementById("select_model_btn").value;
 
 }
-// Function to handle user input and send it to the server
-function sendUserInput() {
-  const inputField = document.getElementById("userInput");
-  const userPrompt = inputField.value.trim();
-  const modelSelected = localStorage.getItem("selectedModel");
 
-  if (!modelSelected) {
-    alert("Please select a model");
-    return;
+  function processQueue() {
+    if (!isSpeaking && textQueue.length > 0) {
+      const sentence = textQueue.shift(); // Get the next sentence from the queue
+      cleanText(sentence); // Prepare the text and start TTS
+      isSpeaking = true; // Set speaking status to true while TTS is active
+    }
   }
 
-  if (userPrompt) {
-    fetch("/get_response", {
+  // Function to end the current message and optionally show a loading indicator
+  function endMessage() {
+    highlightAll();
+    cleanText(text);
+    text = "";
+    response_content = "";
+    flow = false;
+    if (currentSpeaker === "user") {
+      console.log("user");
+      showLoadingIndicator("Thinking...")
+    }
+    currentSpeaker = null;
+  }
+
+  // Function to show a loading indicator
+  function showLoadingIndicator(text) {
+    // Create the loading indicator element
+    loadingIndicator = document.createElement("div");
+    loadingIndicator.className = "loading";
+    loadingIndicator.innerHTML = text;
+    // Ensure messageContent is defined and append the loading indicator
+    if (messageContent) {
+        messageDiv.appendChild(loadingIndicator);
+        console.log(messageDiv, loadingIndicator);
+        
+    } else {
+        console.error("messageContent is not defined");
+    }
+}
+
+
+  // Function to handle user input and send it to the server
+  function sendUserInput() {
+    const inputField = document.getElementById("userInput");
+    const userPrompt = inputField.value.trim();
+    const modelSelected = localStorage.getItem("selectedModel");
+    if (!modelSelected) {
+      alert("Please select a model");
+      return;
+    }
+
+    if (userPrompt) {
+      fetch("/get_response", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: userPrompt, model_need: modelSelected }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Response received:", data.response);
+        })
+        .catch((error) => console.error("Error:", error));
+
+      inputField.value = ""; // Clear input field
+    }
+  }
+
+  // Function to create options for the model selection dropdown
+  function createModelOption(name) {
+    const selectElement = document.getElementById("select_model_btn");
+    const option = document.createElement("option");
+    option.value = name;
+    option.textContent = name;
+    selectElement.appendChild(option);
+  }
+
+  // Fetch the list of models from the server and populate the dropdown
+  function get_list() {
+    fetch("/list_request", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ prompt: userPrompt, model_need: modelSelected, new_chat: new_chat }),
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Response received:", data.response);
+        localStorage.setItem("list", JSON.stringify(data));
+        data.list.models.forEach((model) => createModelOption(model.name));
+        data.list.models.forEach((model) => createModalList(model.name));
+        showNotification("List fetched successfully");
+        save_log("List fetched successfully");
       })
       .catch((error) => console.error("Error:", error));
 
     inputField.value = ""; // Clear input field
     new_chat = false;
   }
-}
 
-// Function to create options for the model selection dropdown
-function createModelOption(name) {
-  const selectElement = document.getElementById("select_model_btn");
-  const option = document.createElement("option");
-  option.value = name;
-  option.textContent = name;
-  selectElement.appendChild(option);
-}
+  // Event listeners for submitting input
+  document.getElementById("submitButton").onclick = sendUserInput;
+  document.getElementById("userInput").addEventListener("keypress", (event) => {
+    if (!flow && event.key === "Enter") sendUserInput();
+  });
 
 // Fetch the list of models from the server and populate the dropdown
 function get_list() {
@@ -309,8 +373,7 @@ eventSource.onmessage = function (event) {
       addContent(response);
       break;
   }
-};
-
+}
 // Function to copy text to clipboard
 function copyToClipboard(text) {
   const textArea = document.createElement("textarea");
@@ -322,8 +385,4 @@ function copyToClipboard(text) {
   save_log("coppied : " + text)
   document.body.removeChild(textArea);
   // alert("Copied to clipboard!");
-}
-const lastMessage = messageDiv.lastElementChild;
-if (lastMessage) {
-  lastMessage.scrollIntoView({ behavior: "smooth" });
 }

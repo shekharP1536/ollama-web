@@ -4,6 +4,16 @@
     margin: 0;
     padding: 0;
 }
+:root {
+    --base_grey: #262626;
+    --base_light_icon: rgb(206, 206, 206);
+    --base_active_icon: #ffffff;
+    --base_green: #44d7b6;
+    --base_main:#1e1e2f;
+    --base_input_active:#393a4f;
+    --base_input:#393a4f79;
+    --base_secondary:#663399;
+}
 
 :root {
     --base_grey: #262626;
@@ -81,7 +91,6 @@ body {
 
 /* Section_a 
  */
-
 .section_a {
     display: flex;
     width: 350px;
@@ -249,7 +258,22 @@ body {
     background-color: #2a243d;
     transition: 0.5s;
 }
-
+/* Headingbar */
+.heading_bar{
+    display: flex;
+    padding: 4px;
+}
+.heading div{
+    margin: 0px 20px;
+    font-size: 25px;
+}
+.toogle_section{
+    margin: 10px 10px;
+}
+.toogle_section :hover{
+    background-color: #2a243d;
+    transition: 0.5s;
+} 
 /* Chat Area */
 #new_msg {
     overflow-y: auto;
