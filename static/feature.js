@@ -54,20 +54,6 @@ mic_button.addEventListener("click", () => {
     prompt = "";
     allow_user_mic = true
     send_cmd("mic_on");
-    // if(first_time){
-    //   var i = 10;
-    //   const interval = setInterval(() => {
-    //     if(i>=1){ 
-    //       sst_content.innerHTML = `First time it may take time to start mic wait ${i}`;
-    //       i--;
-    //     }else{
-    //       first_time = false;
-    //       clearInterval(interval);
-    //       sst_content.innerHTML = `Speak Now and stop once reponse is compeleted`;
-          
-    //     }
-    //   }, 1000);
-    // }
     need_speaker = true;
     for (let outline of outlines) {
       // Loop through outlines correctly
@@ -267,6 +253,7 @@ function showNotification(message) {
     messageElement.innerHTML = '';
     messageElement.style.display = "none";
   }, 5000);
+  save_log(message)
 }
 function save_log(log , category) {
   if(category = "undefined" || category ==""){

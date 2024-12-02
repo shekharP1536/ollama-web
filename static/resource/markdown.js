@@ -1,4 +1,5 @@
 function convertMarkdownToHTML(md) {
+  md = `${md}  `
   let inCodeBlock = false; // Track if inside a code block
   let result = '';
   // Replace <br> tags with a placeholder, split by newlines, and restore <br> tags
@@ -93,9 +94,7 @@ function highlightAll(text) {
   const tempDiv = document.createElement('div');
   tempDiv.innerHTML = text;  // Set the text as HTML content
 
-  console.log(tempDiv);
   // Get all the <code> elements inside the temporary element
-
   const parser = new DOMParser();
   const decodedHTML = parser.parseFromString(text, 'text/html').body.innerHTML;
   tempDiv.innerHTML = decodedHTML;
