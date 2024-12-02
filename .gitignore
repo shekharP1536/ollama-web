@@ -15,6 +15,3 @@ static/resource/an-old-hope.min.css
 from ollama import chat.py
 demo.html
 backend/_chat.py
-client.py
-b.py
-templates/in.html
