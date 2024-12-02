@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/static/resource/logo_icon.png" type="image/icon type">
   <script src="/static/resource/purify.min.js" crossorigin="anonymous"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -12,7 +13,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Playwrite+GB+S:ital,wght@0,100..400;1,100..400&family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
     rel="stylesheet" />
-  <title>Ollama Chat</title>
+  <title>Ollama Web</title>
 </head>
 <link rel="stylesheet" href="/static/resource/an-old-hope.min.css">
 <link rel="stylesheet" href="/static/resource/bootstrap.css" />
@@ -111,7 +112,7 @@
         </div>
       </div>
 
-      <div class="new_model_chat_container" id="new_model_chat_container">
+      <div class="new_model_chat_container" id="new_model_chat_container" onclick="new_chat_re()">
         <div class="newchat_icon_container">
           <i class="fa-solid fa-pen-to-square"></i>
         </div>
@@ -139,7 +140,7 @@
             <i class="fa-solid fa-bars-staggered"></i>
           </div>
           <span class="model_name" id="model_name">
-            <h2> Ollama Chat</h2>
+            <h2> Ollama Web</h2>
           </span>
         </div>
         <select id="select_model_btn">
@@ -154,7 +155,33 @@
           </div>
         </div>
       </div>
-      <div id="new_msg"></div>
+      <div id="new_msg">
+        <div id="conversation-starter-container" class="starter-container">
+          <h3>Let's start with ...</h3>
+          <div class="starter" onclick="chat_chat('Explain quantum physics in simple terms.')">
+            Explain quantum physics in simple terms.
+          </div>
+          <div class="starter" onclick="chat_chat('What are the basics of machine learning?')">
+            What are the basics of machine learning?
+          </div>
+          <div class="starter" onclick="chat_chat('Can you help me write a Python function?')">
+            Can you help me write a Python function?
+          </div>
+        </div>
+        
+        <div id="more-prompts-container" class="more-prompts-container">
+          <div class="prompt" onclick="chat_chat('Tell me a joke about technology.')">
+            Tell me a joke about technology.
+          </div>
+          <div class="prompt" onclick="chat_chat('Summarize the latest trends in AI.')">
+            Summarize the latest trends in AI.
+          </div>
+          <div class="prompt" onclick="chat_chat('What is the meaning of life?')">
+            What is the meaning of life?
+          </div>
+        </div>
+        
+      </div>
       <div class="other_option_input" id="other_option_input">
 
       </div>
@@ -163,13 +190,14 @@
           <button id="CallButton" data-toggle="tooltip" title="Call" data-bs-placement="top"><i
               class="fa-solid fa-headphones"></i></button>
           <input type="file" id="media_file" name="media_file" style="display: none;">
-          <button>
+          <!-- <button>
           <label for="media_file" data-toggle="tooltip" title="Upload Media" data-bs-placement="top">
               <i class="fa-solid fa-plus"></i>
             </label>
-          </button>
+          </button> -->
         </div>
-        <input type="text" id="userInput" placeholder="/ Type your message..." value="simple python synatax"/>
+        <div id="userInput" contenteditable="true" style="max-height: 200px; overflow: auto;padding: 10px;" placeholder="/ Type your message..."></div>
+
         <button id="submitButton" data-toggle="tooltip" title="Send Message" data-bs-placement="top"><i
             class="fa-solid fa-arrow-up"></i></button>
       </div>
@@ -317,6 +345,9 @@
             <button class="tablinks" id="viewLogs_btn" onclick="openTab(event, 'viewLogs')"><i
                 class="fa-solid fa-square-binary"></i>
               System logs</button>
+            <button class="tablinks" id="viewLogs_btn" onclick="openTab(event, 'About')"><i
+                class="fa-solid fa-info"></i>
+              About</button>
             <!-- <button class="tablinks" onclick="openTab(event, 'System')">System</button> -->
             <!-- <button class="tablinks" onclick="openTab(event, 'Other')">Other</button> -->
           </div>
@@ -331,6 +362,33 @@
             <div id="modal_container">
 
             </div>
+          </div>
+          <div id="About" class="tabcontent">
+            <div id="modal_container" class="modal-card">
+              <div class="card-header">
+                <h4 class="project-name">Ollama-web</h4>
+                <p class="created-by">By: Shekhar</p>
+                <img src="/static/resource/logo.png" alt="logo" style="width: 60px;border-radius: 50%; border:1px solid black">
+              </div>
+              <div class="card-body">
+                <p class="description">A project to explore and enhance LLM integration with web platforms.</p>
+                <div class="links">
+                  <a href="https://github.com/shekharP1536" target="_blank" class="link github-link">
+                    <i class="fa-brands fa-github"></i> GitHub Profile
+                  </a>
+                  <a href="https://github.com/shekharP1536/ollama-web" target="_blank" class="link project-link">
+                    <i class="fa-solid fa-code"></i> Project URL
+                  </a>
+                  <a href="https://www.linkedin.com/in/chandrashekhar-pachlore/" target="_blank" class="link linkedin-link">
+                    <i class="fa-brands fa-linkedin"></i> LinkedIn Profile
+                  </a>
+                </div>
+              </div>
+              <div class="card-footer">
+                <p>Credits: All rights reserved © Shekhar</p>
+              </div>
+            </div>
+            
           </div>
 
           <div id="viewLogs" class="tabcontent">
@@ -376,7 +434,6 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn">save</button>
           </div>
         </div>
       </div>
@@ -396,5 +453,4 @@
   <script type="module" src="/static/extra.js"></script>
   <script src="https://kit.fontawesome.com/0d194b00b9.js" crossorigin="anonymous"></script>
 </body>
-
 </html>

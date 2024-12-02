@@ -238,19 +238,20 @@ body {
 .tab {
   /* display: flex; */
   float: left;
-  background-color: rgb(42, 36, 61);
+  /* background-color: rgb(42, 36, 61); */
   width: 25%;
   height: 500px;
 }
 
 /* Style the buttons inside the tab */
 .tab button {
-  border-radius: 0px;
+  border-radius: 10px;
   display: block;
+  margin-bottom: 3px;
   background-color: inherit;
   color: white;
   background-color: rgb(42, 36, 61);
-  /* padding: 16px; */
+  /* padding: 3px; */
   width: 100%;
   border: none;
   outline: none;
@@ -278,7 +279,7 @@ body {
   padding: 12px;
   width: 75%;
   border-left: none;
-  height: 500px;
+  height: 600px;
   display: none;
   /* Hidden by default */
 }
@@ -546,11 +547,8 @@ body {
   display: none;
   position: fixed;
   bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
   background-color: #000000b3;
   color: #fff;
-  font-size: 20px;
   padding: 10px 20px;
   border-radius: 5px;
   animation: fadeOut 5s ease;

@@ -9,6 +9,7 @@ let currentSentence = "";
 let new_chat = false
 const callButton = document.getElementById('CallButton');
 const speechContent = document.getElementById('speech_content');
+var continaer_of_all = document.getElementById('section_a_chats_holder');
 
 // Add click event listener to the button
 callButton.addEventListener('click', () => {
@@ -16,7 +17,32 @@ callButton.addEventListener('click', () => {
   speechContent.classList.toggle('none');
 
 });
-const new_chat_btn = document.getElementById('new_model_chat_container');
+document.addEventListener("DOMContentLoaded", () => {
+  const container = document.getElementById("section_a_chats_holder");
+
+  if (container) {
+    container.addEventListener("click", (event) => {
+      // Check if a clicked element has the class 'section_a_chats'
+      const clickedElement = event.target.closest(".section_a_chats");
+
+      if (clickedElement && container.contains(clickedElement)) {
+        // Remove 'active_div' class from all elements with the class 'section_a_chats'
+        const chatElements = container.querySelectorAll(".section_a_chats");
+        chatElements.forEach((element) => {
+          element.classList.remove("active_div");
+        });
+
+        // Add 'active_div' class to the clicked element
+        clickedElement.classList.add("active_div");
+
+        // Log the id of the clicked element
+        const elementId = clickedElement.id;
+        console.log("Clicked element ID:", elementId);
+        load_chat(elementId)
+      }
+    });
+  }
+});
 // Initialize the page and populate model list on load
 document.addEventListener("DOMContentLoaded", get_chats);
 document.addEventListener("DOMContentLoaded", get_list);
@@ -25,6 +51,41 @@ selectElement.addEventListener("change", (event) => {
   console.log('Change detected!');
   localStorage.setItem("selectedModel", event.target.value);
 }); 
+function load_chat(id){
+  fetch('/load_chat',{
+    method : "POST",
+    headers: {"Content-Type": "application/json"},
+    body : JSON.stringify({"Id" : id})
+  })
+  .then((response) => response.json())
+  .then((data) =>{
+    messageDiv.innerHTML = "";
+    console.log(data);
+    data.response.forEach((response) => {
+      var speaker = response.role;
+      var content = response.content;
+      if(speaker == "user"){
+        startMessage("user");
+        text = "";
+        endMessage();
+        addContent(content);
+      }else{
+        action(true);
+        startMessage("bot");
+        addContent(content);
+        endMessage();
+        action(false);
+      }
+    }) 
+  })
+}
+function new_chat_re(){
+  console.log("ssdsd");
+  messageDiv.innerHTML = "";
+  get_chats()
+  showNotification("starting New Chat");
+  new_chat = true
+}
 function setModel() {
   const selectElement = document.getElementById("select_model_btn");
   if (!selectElement) {
@@ -66,8 +127,20 @@ function startMessage(speaker) {
   // Create a container for the speaker's name
   const speakerNameContainer = document.createElement("div");
   speakerNameContainer.classList.add("speaker-name");
-  speakerNameContainer.innerHTML = `<strong>${speaker === "user" ? "You" : modelName
-    }:</strong>`;
+
+  if (speaker === "bot") {
+    // Add an icon for the bot
+    const botIcon = document.createElement("img");
+    botIcon.src = "/static/resource/logo_icon.png";
+    botIcon.alt = "Bot Icon";
+    botIcon.classList.add("bot-icon"); // Add a CSS class for styling
+    botIcon.style.width = "16px"; // Adjust size as needed
+    botIcon.style.height = "16px";
+    botIcon.style.marginRight = "15px"; // Add spacing between icon and text
+    speakerNameContainer.appendChild(botIcon);
+  }
+
+  speakerNameContainer.innerHTML += `<strong>${speaker === "user" ? "You" : modelName}:</strong>`;
   messageContainer.appendChild(speakerNameContainer);
 
   // Create a container for the response content
@@ -78,10 +151,9 @@ function startMessage(speaker) {
   // Add a hover effect to show the copy button
   var copyButton_container = document.createElement("p");
   copyButton_container.classList.add("copy");
-  copyButton_container.style.Display = "none";
+  copyButton_container.style.display = "none"; // Correct capitalization of "display"
   var copyButton = document.createElement("i");
-  copyButton.classList.add("fa-regular");
-  copyButton.classList.add("fa-copy");
+  copyButton.classList.add("fa-regular", "fa-copy");
   copyButton.addEventListener("click", () => {
     copyToClipboard(messageContentContainer.innerText);
     copyButton_container.innerHTML = '<i class="fa-solid fa-copy"></i> copied';
@@ -96,9 +168,10 @@ function startMessage(speaker) {
 
   if (speaker === "bot" && loadingIndicator) {
     loadingIndicator.remove();
-    console.log("loadingremoved");
+    console.log("loading removed");
   }
 }
+
 // Function to add content to the current message
 function addContent(content) {
   if (content !== undefined && content !== "") {
@@ -208,7 +281,7 @@ function set_model() {
   // Function to handle user input and send it to the server
   function sendUserInput() {
     const inputField = document.getElementById("userInput");
-    const userPrompt = inputField.value.trim();
+    const userPrompt = inputField.innerText.trim();
     const modelSelected = localStorage.getItem("selectedModel");
     if (!modelSelected) {
       alert("Please select a model");
@@ -219,7 +292,7 @@ function set_model() {
       fetch("/get_response", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: userPrompt, model_need: modelSelected }),
+        body: JSON.stringify({ prompt: userPrompt, model_need: modelSelected,new_chat }),
       })
         .then((response) => response.json())
         .then((data) => {
@@ -227,7 +300,7 @@ function set_model() {
         })
         .catch((error) => console.error("Error:", error));
 
-      inputField.value = ""; // Clear input field
+      inputField.innerText = ""; // Clear input field
     }
   }
 
@@ -264,7 +337,10 @@ function set_model() {
   // Event listeners for submitting input
   document.getElementById("submitButton").onclick = sendUserInput;
   document.getElementById("userInput").addEventListener("keypress", (event) => {
-    if (!flow && event.key === "Enter") sendUserInput();
+    if (!flow && event.key === "Enter"){
+      event.preventDefault();
+      sendUserInput();
+    } 
   });
 
 // Fetch the list of models from the server and populate the dropdown
@@ -286,6 +362,7 @@ function get_list() {
     .catch((error) => console.error("Fetch error:", error));
 }
 function get_chats() {
+  continaer_of_all.innerHTML = ""
   fetch("/get_chats", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -296,7 +373,7 @@ function get_chats() {
       localStorage.setItem("chats", JSON.stringify(data));
       console.log(data);
       data.response.forEach(chat => {
-        model_chat_list(chat);
+        model_chat_list(chat.title ,chat.id );
       });
 
 
@@ -310,8 +387,7 @@ document.getElementById("userInput").addEventListener("keypress", (event) => {
   if (!flow && event.key === "Enter") sendUserInput();
 });
 
-function model_chat_list(modal_name) {
-  var continaer_of_all = document.getElementById('section_a_chats_holder');
+function model_chat_list(modal_name,id) {
   // continaer_of_all.innerHTML = ""
   var div = document.createElement("div");
   var div1 = document.createElement("div");
@@ -321,6 +397,7 @@ function model_chat_list(modal_name) {
   var span2 = document.createElement("span");
 
   div.className = "section_a_chats";
+  div.id = id
   div1.className = "chat_title";
   div2.className = "chat_option";
 
@@ -385,4 +462,10 @@ function copyToClipboard(text) {
   save_log("coppied : " + text)
   document.body.removeChild(textArea);
   // alert("Copied to clipboard!");
+}
+function chat_chat(prompt) {
+  console.log(`Running chat with prompt: ${prompt}`);
+  var input = document.getElementById("userInput");
+  input.innerText = prompt;
+  // Implement chat functionality here
 }

@@ -13,13 +13,13 @@ mediaFileInput.addEventListener("change", function () {
 
         console.log(`Uploaded file name: ${fileName}`);
         console.log(`File size: ${fileSize} bytes (${fileSizeInKB} KB / ${fileSizeInMB} MB)`);
-        validate_file(fileName,fileSizeInMB);
+        var file_size = `${fileSizeInKB} KB / ${fileSizeInMB}`
+        validate_file(fileName,file_size);
     } else {
         console.log("No file selected.");
     }
 });
 function validate_file(filename, filesize) {
-    const fileSize = 32
     const allowedExtensions = ['jpg', 'jpeg', 'png', 'html', 'json','py', 'pdf', 'doc', 'docx'];
     const fileExtension = filename.split('.').pop().toLowerCase();
     if (!allowedExtensions.includes(fileExtension)) {
@@ -27,12 +27,7 @@ function validate_file(filename, filesize) {
         alert(`Invalid file type. Allowed types: ${allowedExtensions.join(', ')}`);
         return;
     }
-    if (filesize > fileSize) {
-        console.error(`File size exceeds 32 MB. Your file size: ${(filesize / (1024 * 1024)).toFixed(2)} MB`);
-        alert(`File size exceeds 32 MB. Your file size: ${(filesize / (1024 * 1024)).toFixed(2)} MB`);
-        return;
-    }
-    createMediaTag(filename, `${(filesize / (1024 * 1024)).toFixed(2)} MB`);
+    createMediaTag(filename, `${(filesize)} MB`);
 }
 function createMediaTag(name, size) {
     other_option_input.innerHTML = "";

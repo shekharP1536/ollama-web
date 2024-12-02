@@ -14,7 +14,7 @@ clients = []
 chat_history = []
 clients_lock = threading.Lock()
 stream_flow = False
-chat_title = "Starting New chat"
+chat_title = ""
 app = Flask(__name__, template_folder='templates')
 
 def getId():
@@ -22,6 +22,7 @@ def getId():
     current_time = datetime.datetime.now()
     formatted_time = current_time.strftime("%Y%m%d_%H%M%S")
     date_str = formatted_time
+    date_str = str(uuid.uuid4())
     print(date_str)
 getId()
 def save_conversation(create_new_file=False):
@@ -79,11 +80,13 @@ def save_conversation(create_new_file=False):
 
 def new_chat(title,create_new_file=False):
     print("Request for new chat.")
-    global conversation, con_path, chat_title
+    global conversation, con_path, chat_title,chat_history
     conversation = []
+    chat_history = []
     con_path = "" 
     chat_title = title
     getId()
+    print("here" , conversation,chat_history)
     save_conversation(create_new_file=True)
 
 def client(data):
@@ -94,12 +97,15 @@ def client(data):
 
 # Generate LLM response
 def generate_response(prompt, model,chat_request):
+    global chat_history,conversation
     print(prompt, model,chat_request)
     if prompt == "":
         return
     if chat_request == True:
         print("true")
-        new_chat(prompt[:20])
+        conversation = []
+        chat_history = []
+        new_chat(prompt[:50])
     
     user_rep_st = "[|/__USER_START__/|]"
     client(user_rep_st)
@@ -115,11 +121,11 @@ def generate_response(prompt, model,chat_request):
         stream=True,
     )
     response_text = ""
-    global stream_web
+    global stream_web,chat_title
     stream_web = True
+    chat_title = prompt[:50]
 
     start_marker = "[|/__START__/|]"
-    save_conversation()
     client(start_marker)
 
     for chunk in stream:
@@ -129,10 +135,12 @@ def generate_response(prompt, model,chat_request):
         response_text += message_chunk
         process(message_chunk)
         
-    conversation.append({'role': 'bot', 'model': model, 'content': response_text})
+    conversation.append({'role': 'assistant', 'model': model, 'content': response_text})
     chat_history.append({'role': 'assistant', 'content': response_text})
     done_marker = "[|/__DONE__/|]"
     stream_web = False
+    print("here2" , conversation,chat_history)
+
     save_conversation()
 
     client(done_marker)
@@ -173,6 +181,47 @@ def exe_cmd():
             return jsonify({"error": "File not found"}), 404
 
     return jsonify({"status": "success", "command": cmd})
+@app.route('/load_chat' , methods= ["POST"])
+def load_chat():
+    global conversation , chat_history
+    data = request.get_json()
+    chat_id = data.get("Id")  # Extract the ID from the request
+    print("Received Chat ID:", chat_id)
+    # Path to the chat log file based on the ID
+    file_name = f'log_data/conversation_logs/conversation_{chat_id}.json'
+    print("File path:", file_name)
+
+    content = []  # List to hold conversations
+
+    try:
+        # Open the file and load its content
+        with open(file_name, 'r') as f:
+            file_data = json.load(f)  # Load JSON content
+            # print("File data loaded successfully:", file_data)
+
+            # Ensure `file_data` is a list (as per the provided structure)
+            if isinstance(file_data, list):
+                for chat in file_data:
+                    # Check if "conversation" exists and is a list
+                    if "conversation" in chat and isinstance(chat["conversation"], list):
+                        content.extend(chat["conversation"])  # Add conversation entries to the content list
+            else:
+                print("Unexpected file structure: file_data is not a list")
+        
+        # Return the conversation content
+        conversation = content
+        chat_history = content
+        return jsonify({"response": content})
+
+    except FileNotFoundError:
+        print(f"File not found: {file_name}")
+        return jsonify({"response": "Fail", "error": "File not found"})
+    except json.JSONDecodeError as e:
+        print(f"JSON decode error: {e}")
+        return jsonify({"response": "Fail", "error": "Invalid JSON file"})
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        return jsonify({"response": "Fail", "error": str(e)})
 
 @app.route('/stream_response')
 def stream_response():
@@ -209,6 +258,7 @@ def get_chats():
         return jsonify({"cat": "empty", "response": "No chats found"})
     
     chat_titles = []
+    chat_ids = []
     
     # Iterate through each .json file and extract the chat_title
     for json_file in json_files:
@@ -224,12 +274,15 @@ def get_chats():
                         # Ensure 'chat_title' exists in each chat
                         if "chat_title" in chat:
                             chat_titles.append(chat["chat_title"])
+                            chat_ids.append(chat["chat_id"])
         except json.JSONDecodeError:
             continue  
     if not chat_titles:
         return jsonify({"cat": "empty", "response": "No valid chat titles found"})
     
     # Return the list of chat titles
-    return jsonify({"cat": "success", "response": chat_titles})
+    titles_and_ids = [{"title": title, "id": chat_id} for title, chat_id in zip(chat_titles, chat_ids)]
+    return jsonify({"cat": "success", "response": titles_and_ids})
+
 if __name__ == '__main__':
     app.run(debug=True)

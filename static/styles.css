@@ -4,15 +4,16 @@
     margin: 0;
     padding: 0;
 }
+
 :root {
     --base_grey: #262626;
     --base_light_icon: rgb(206, 206, 206);
     --base_active_icon: #ffffff;
     --base_green: #44d7b6;
-    --base_main:#1e1e2f;
-    --base_input_active:#393a4f;
-    --base_input:#393a4f79;
-    --base_secondary:#663399;
+    --base_main: #1e1e2f;
+    --base_input_active: #393a4f;
+    --base_input: #393a4f79;
+    --base_secondary: #663399;
 }
 
 :root {
@@ -145,6 +146,7 @@ body {
 
 .section_a_search-container {
     border: 1px;
+    display: none;
     outline: none;
 }
 
@@ -190,9 +192,16 @@ body {
 .section_a_chat_breif_container {
     margin: 2px 1px;
 }
-.section_a_chats:hover{
+
+.section_a_chats:hover {
     background-color: var(--base_secondary);
 }
+
+.active_div {
+    background-color: var(--base_secondary);
+    border: 0.1em solid white;
+}
+
 /* Main Container */
 .container_n {
     width: 100%;
@@ -258,22 +267,27 @@ body {
     background-color: #2a243d;
     transition: 0.5s;
 }
+
 /* Headingbar */
-.heading_bar{
+.heading_bar {
     display: flex;
     padding: 4px;
 }
-.heading div{
+
+.heading div {
     margin: 0px 20px;
     font-size: 25px;
 }
-.toogle_section{
+
+.toogle_section {
     margin: 10px 10px;
 }
-.toogle_section :hover{
+
+.toogle_section :hover {
     background-color: #2a243d;
     transition: 0.5s;
-} 
+}
+
 /* Chat Area */
 #new_msg {
     overflow-y: auto;
@@ -328,7 +342,7 @@ body {
 /* Input Area */
 .input_message {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     margin-top: 10px;
     border-bottom: 2px solid rebeccapurple;
     background-color: var(--base_main);
@@ -570,12 +584,12 @@ kbd {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color:#080808 ;
+    background-color: #080808;
     border: 1px solid #080808;
     border-radius: 20px;
     padding: 8px 15px;
     margin: 8px 0;
-    max-width:300px;
+    max-width: 300px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease-in-out;
     cursor: default;
@@ -588,15 +602,16 @@ kbd {
 /* Content section of the tag */
 .media-tag-content {
     display: flex;
-    flex-direction: column;
-    gap: 2px;
+    flex-direction: row;
+    gap: 5px 10px;
+    align-items: center;
 }
 
 /* Name and size styling */
 .media-tag-name {
     font-size: 14px;
     font-weight: bold;
-    color: #333;
+    color: #ffffff;
     margin: 0;
 }
 
@@ -622,4 +637,158 @@ kbd {
 .media-tag-close:hover {
     background-color: #ff5b5b;
     color: #fff;
+}
+
+/* Container for the conversation starters */
+.starter-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+/* Style for each starter div */
+.starter {
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: transform 0.2s ease;
+    background-color: #5f9ea06e;
+}
+
+.starter:hover {
+    background-color: var(--base_secondary);
+    /* transform: scale(1.05); */
+    text-decoration: underline;
+}
+
+/* Container for additional prompts */
+.more-prompts-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+/* Style for each prompt */
+.prompt {
+    padding: 8px 12px;
+    border: 1px dashed #aaa;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.prompt:hover {
+    background-color: var(--base_secondary);
+    text-decoration: underline;
+}
+
+#logContainer {
+    padding: 20px;
+    border: 1px solid #ddd;
+    /* light gray border */
+}
+
+.log-entry {
+    margin-bottom: 10px;
+    /* add space between log entries */
+    padding: 10px;
+    border-radius: 5px;
+    /* slightly rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* subtle shadow effect */
+
+}
+
+.log-entry:last-child {
+    margin-bottom: 0;
+    /* remove space after the last log entry */
+
+}
+
+.info {
+    color: #4CAF50;
+    /* green text color for info messages */
+    font-weight: bold;
+    /* make the text more prominent */
+}
+
+
+
+.time {
+    font-size: 12px;
+    /* smaller font size for time */
+    color: #666;
+    /* grayish-brown color for time */
+}
+
+#userInput[contenteditable="true"]:empty::before {
+    content: attr(placeholder);
+    color: gray;
+    font-style: italic;
+    pointer-events: none;
+}
+
+h3 {
+    font-size: 20px;
+    /* color: #333; */
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+label {
+    font-size: 14px;
+    color: #e4e4e4;
+    display: block;
+    font-weight: bold;
+}
+
+
+/* Select Styling */
+#voiceSelect {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+#voiceSelect:focus {
+    border-color: #0073e6;
+}
+
+/* Range Input Styling */
+.range {
+    width: 100%;
+    margin: 10px 0 20px;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    /* background: #ddd; */
+    border-radius: 4px;
+    outline: none;
+}
+
+.range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background-color: #0073e6;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.range::-webkit-slider-thumb:hover {
+    background-color: #005bb5;
 }
